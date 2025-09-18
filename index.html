@@ -3,547 +3,2585 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Assessment Asa Jiwa Foundation</title>
+    <title>Sistem Internal - Asa Jiwa Foundation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* CSS akan tetap sama seperti sebelumnya, saya hanya menambahkan sedikit untuk PG */
-        /* ... (semua CSS dari sebelumnya tetap sama, tidak ada perubahan) ... */
         :root {
-            --primary-color: #0056b3; --secondary-color: #f4f4f4; --accent-color: #28a745; --danger-color: #dc3545; --info-color: #17a2b8; --warning-color: #ffc107; --purple-color: #6f42c1; --text-color: #333; --border-color: #ddd; --shadow: 0 4px 8px rgba(0,0,0,0.1); --light-gray: #f8f9fa;
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: var(--text-color); background-color: #f0f2f5; margin: 0; padding: 20px; }
-        .container { max-width: 1300px; margin: 30px auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: var(--shadow); }
-        h1, h2, h3 { color: var(--primary-color); border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px; margin-top: 0; }
-        h1 { text-align: center; }
-        .form-section, .card { margin-bottom: 30px; padding: 20px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--light-gray); }
-        .question-block { margin-bottom: 25px; }
-        label { display: block; font-weight: bold; margin-bottom: 8px; color: #555; }
-        textarea, input[type="text"], input[type="password"], input[type="email"], select { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 1rem; box-sizing: border-box; transition: border-color 0.3s; }
-        textarea:focus, input:focus, select:focus { border-color: var(--primary-color); outline: none; }
-        textarea { min-height: 130px; resize: vertical; }
-        button { display: inline-block; background: var(--primary-color); color: #fff; padding: 12px 25px; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: background-color 0.3s, transform 0.2s; margin: 5px; }
-        button:hover { background: #004494; transform: translateY(-2px); }
-        button.danger { background: var(--danger-color); } button.danger:hover { background: #c82333; }
-        button.success { background: var(--accent-color); } button.success:hover { background: #218838; }
-        .hidden { display: none !important; }
-        .auth-form, .participant-start-form { text-align: center; max-width: 400px; margin: 40px auto; padding: 25px; border: 1px solid var(--border-color); border-radius: 8px; }
-        .auth-form input, .auth-form button { width: 90%; margin: 8px 0; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; box-shadow: var(--shadow); }
-        th, td { padding: 12px; border: 1px solid var(--border-color); text-align: left; vertical-align: top; }
-        th { background-color: var(--primary-color); color: white; font-weight: bold; }
-        tr:nth-child(even) { background-color: #f9f9f9; } tr:hover { background-color: #f1f1f1; }
-        .announcement-box { background-color: #e7f3fe; border-left: 6px solid var(--primary-color); padding: 20px; margin: 20px 0; border-radius: 5px; }
-        .status-badge { padding: 6px 12px; border-radius: 20px; color: white; font-size: 0.85em; font-weight: bold; text-transform: uppercase; }
-        .status-pending { background-color: var(--warning-color); color: #333; } .status-rejected { background-color: var(--danger-color); } .status-accepted-t2 { background-color: var(--info-color); } .status-accepted-role { background-color: var(--accent-color); }
-        .loading { text-align: center; font-style: italic; color: #777; }
-        .admin-nav { background: var(--secondary-color); padding: 10px 20px; border-radius: 6px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-        .admin-nav h2 { margin: 0; border: none; } .admin-nav button { padding: 8px 15px; font-size: 0.9rem; }
-        .top-score { font-weight: bold; color: var(--accent-color); }
-        .result-box { background-color: #e8f5e9; border: 1px solid var(--accent-color); padding: 15px; border-radius: 6px; margin-top: 15px; text-align: center; }
-        .result-box h4 { margin-top: 0; color: var(--accent-color); }
-        .login-error { color: var(--danger-color); font-size: 0.9em; margin-top: 10px; display: none; }
-        .announcement-table-section { margin-top: 30px; } .announcement-table-section h3 { color: var(--info-color); }
-        .role-badge { background-color: var(--purple-color); color: white; padding: 3px 8px; border-radius: 10px; font-size: 0.8em; }
-        .admin-menu-card { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
-        .admin-menu-card .card { flex: 1 1 300px; text-align: center; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; background-color: white; border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; }
-        .admin-menu-card .card:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
-        .admin-menu-card .card h3 { border: none; margin-bottom: 10px; }
-        .structure-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
-        .structure-item { background: white; border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; }
-        .structure-item h4 { margin-top: 0; color: var(--primary-color); border-bottom: 1px solid var(--secondary-color); padding-bottom: 5px; }
-        .performance-form .form-group { margin-bottom: 15px; }
-        .performance-form label { font-weight: normal; }
-        .performance-form input[type="number"] { width: 80px; }
-        .notes-textarea { margin-top: 10px; }
-        .multiple-choice-question { margin-bottom: 20px; padding: 15px; border: 1px solid var(--border-color); border-radius: 8px; background-color: #fff; }
-        .multiple-choice-question p { margin: 0 0 10px 0; font-weight: 600; }
-        .multiple-choice-question .options label { font-weight: normal; display: flex; align-items: center; margin-bottom: 8px; cursor: pointer; }
-        .multiple-choice-question .options input[type="radio"] { margin-right: 10px; width: auto; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fb;
+            color: var(--dark-color);
+        }
+        
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .login-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .login-body {
+            padding: 30px;
+        }
+        
+        .dashboard-container {
+            display: none;
+        }
+        
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            padding-top: 60px;
+            background-color: var(--primary-color);
+            color: white;
+            width: 250px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar.collapsed {
+            width: 70px;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .sidebar-menu .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu .nav-link:hover, .sidebar-menu .nav-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-menu .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .sidebar.collapsed .nav-link span {
+            display: none;
+        }
+        
+        .sidebar.collapsed .sidebar-header h5 {
+            display: none;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+            min-height: 100vh;
+        }
+        
+        .main-content.expanded {
+            margin-left: 70px;
+        }
+        
+        .topbar {
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .content-section {
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .stat-card {
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card.primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .stat-card.success {
+            background: linear-gradient(135deg, #2a9d8f, #264653);
+        }
+        
+        .stat-card.warning {
+            background: linear-gradient(135deg, #f9a826, #f9844a);
+        }
+        
+        .stat-card.danger {
+            background: linear-gradient(135deg, #e63946, #d62828);
+        }
+        
+        .org-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .org-level {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .org-node {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 0 10px;
+            text-align: center;
+            min-width: 150px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .org-node.editable {
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .org-node.editable:hover::after {
+            content: '\f303';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: white;
+            color: var(--primary-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #e63946;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        .action-buttons button {
+            margin-right: 5px;
+        }
+        
+        .forum-post {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        
+        .forum-post:last-child {
+            border-bottom: none;
+        }
+        
+        .forum-post-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .forum-post-author {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .forum-post-date {
+            color: #6c757d;
+            font-size: 0.85rem;
+        }
+        
+        .document-item {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .document-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .document-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .sidebar-header h5 {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .org-level {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .org-node {
+                margin-bottom: 10px;
+                width: 80%;
+            }
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .modal-header {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .modal-header .btn-close {
+            filter: invert(1);
+        }
     </style>
 </head>
 <body>
-
-    <!-- VIEW 1: Halaman Utama (Login / Mulai) -->
-    <div id="landingPage" class="container">
-        <h1>Sistem Assessment Asa Jiwa Foundation</h1>
-        <p style="text-align: center; font-size: 1.1em; color: #666;">Selamat datang di sistem penilaian online Asa Jiwa Foundation. Silakan pilih peran Anda.</p>
-        <div class="auth-form"><h2>Area Admin Internal</h2><p style="font-size: 0.9em; color: #888;">Hanya untuk panitia internal Asa Jiwa Foundation</p><input type="email" id="adminEmailInput" placeholder="Email Admin" required><input type="password" id="adminPasswordInput" placeholder="Password Admin" required><button onclick="adminLogin()">Masuk sebagai Admin</button><div id="loginError" class="login-error">Email atau Password salah!</div></div>
-        <hr style="margin: 40px 0; border: 0; border-top: 1px solid var(--border-color);">
-        <div class="participant-start-form"><h2>Area Peserta</h2><p style="font-size: 0.9em; color: #888;">Isi form assessment untuk calon pengurus</p><button onclick="showParticipantForm()">Mulai Assessment</button><br><br><button onclick="showAnnouncementPage()" style="background: var(--info-color);">Lihat Pengumuman</button></div>
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+        <div class="login-card">
+            <div class="login-header">
+                <h3><i class="fas fa-heart"></i> Asa Jiwa Foundation</h3>
+                <p class="mb-0">Sistem Internal</p>
+            </div>
+            <div class="login-body">
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" value="asajiwafoundation@gmail.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" value="ASAJIWAFOUNDATION" required>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                </form>
+                <div class="alert alert-danger mt-3" id="loginError" style="display: none;">
+                    Email atau password salah!
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- VIEW 2: Form Peserta -->
-    <div id="participantFormPage" class="container hidden">
-        <h1>Form Assessment Calon Pengurus</h1>
-        <form id="assessmentForm">
-            <div class="form-section"><h2>Data Diri</h2><label for="participantName">Nama Lengkap:</label><input type="text" id="participantName" name="participantName" required><label for="participantEmail">Email Aktif:</label><input type="email" id="participantEmail" name="participantEmail" required></div>
+    <!-- Dashboard -->
+    <div class="dashboard-container" id="dashboardPage">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h5><i class="fas fa-heart"></i> AJF</h5>
+            </div>
+            <div class="sidebar-menu">
+                <nav class="nav flex-column">
+                    <a class="nav-link active" href="#" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a class="nav-link" href="#" data-section="attendance">
+                        <i class="fas fa-user-check"></i>
+                        <span>Absensi</span>
+                    </a>
+                    <a class="nav-link" href="#" data-section="performance">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Penilaian Kinerja</span>
+                    </a>
+                    <a class="nav-link" href="#" data-section="members">
+                        <i class="fas fa-users"></i>
+                        <span>Data Anggota</span>
+                    </a>
+                    <a class="nav-link" href="#" data-section="organization">
+                        <i class="fas fa-sitemap"></i>
+                        <span>Struktur Organisasi</span>
+                    </a>
+                    <a class="nav-link" href="#" data-section="programs">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Program & Kegiatan</span>
+                    </a>
+                    <a class="nav-link" href="#" data-section="documents">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Dokumen & Arsip</span>
+                    </a>
+                    <a class="nav-link" href="#" data-section="forum">
+                        <i class="fas fa-comments"></i>
+                        <span>Forum Diskusi</span>
+                    </a>
+                    <a class="nav-link" href="#" data-section="reports">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Laporan & Statistik</span>
+                    </a>
+                    <a class="nav-link" href="#" data-section="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Pengaturan</span>
+                    </a>
+                    <a class="nav-link" href="#" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
 
-            <div class="form-section">
-                <h2>Tes Psikologi (Essay)</h2>
-                <div class="question-block"><label>1. Ceritakan tentang pengalaman pribadi di mana Anda harus menghadapi tekanan atau stres yang sangat besar. Bagaimana cara Anda menghadapinya, dan apa pembelajaran utama yang Anda ambil dari pengalaman tersebut?</label><textarea name="psy_1" required></textarea></div>
-                <div class="question-block"><label>2. Jika seorang teman dekat Anda tiba-tiba menunjukkan perubahan perilaku yang mencolok dan menarik diri dari lingkungan sosial, langkah-langkah apa yang akan Anda lakukan untuk mendukungnya? Jelaskan pendekatan Anda.</label><textarea name="psy_2" required></textarea></div>
-                <div class="question-block"><label>3. Bagaimana Anda mendefinisikan 'kesehatan mental' dalam konteks diri sendiri? Apa indikator-indikator yang Anda gunakan untuk mengetahui bahwa Anda sedang dalam kondisi mental yang baik atau sebaliknya?</label><textarea name="psy_3" required></textarea></div>
-                <div class="question-block"><label>4. Deskripsikan mekanisme coping (strategi penanggulangan) yang biasa Anda lakukan saat merasa cemas atau kewalahan. Seberapa efektif mekanisme tersebut bagi Anda?</label><textarea name="psy_4" required></textarea></div>
-                <div class="question-block"><label>5. Menurut Anda, apa peran penting dari kesadaran akan kesehatan mental dalam komunitas atau lingkungan kerja, dan bagaimana Anda berkontribusi untuk menciptakan lingkungan yang mendukung?</label><textarea name="psy_5" required></textarea></div>
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Topbar -->
+            <div class="topbar">
+                <div>
+                    <button class="btn btn-light" id="toggleSidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+                <div>
+                    <span class="me-3">Selamat datang, Admin</span>
+                    <div class="position-relative d-inline-block">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-section">
-                <h2>Tes Kepemimpinan (Essay)</h2>
-                <div class="question-block"><label>1. Menurut Anda, apa perbedaan mendasar antara 'memimpin' dan 'mengatur'? Berikan contoh situasi di mana satu pendekatan lebih efektif daripada yang lain dalam konteks organisasi sukarela seperti Asa Jiwa Foundation.</label><textarea name="lead_1" required></textarea></div>
-                <div class="question-block"><label>2. Bayangkan Anda memimpin sebuah proyek, dan salah satu anggota tim secara konsisten tidak memenuhi tenggat waktu. Bagaimana Anda akan menangani situasi ini untuk memastikan proyek tetap on track tanpa menciptakan konflik yang merusak?</label><textarea name="lead_2" required></textarea></div>
-                <div class="question-block"><label>3. Seorang pemimpin sering kali harus membuat keputusan yang tidak populer untuk kebaikan keseluruhan tim. Bagaimana Anda mengomunikasikan keputusan sulit tersebut kepada tim Anda untuk meminimalkan resistensi dan menjaga moral tetap tinggi?</label><textarea name="lead_3" required></textarea></div>
-                <div class="question-block"><label>4. Apa arti 'memberdayakan' bagi Anda sebagai seorang pemimpin? Jelaskan strategi konkret yang akan Anda gunakan untuk mengidentifikasi, mengembangkan, dan mempercayai potensi anggota tim Anda.</label><textarea name="lead_4" required></textarea></div>
-                <div class="question-block"><label>5. Dalam lingkungan yang sering berubah seperti organisasi kemasyarakatan, bagaimana Anda membina ketahanan (resilience) dan kemampuan adaptasi dalam diri Anda dan tim yang Anda pimpin?</label><textarea name="lead_5" required></textarea></div>
-            </div>
-
-            <div class="form-section">
-                <h2>Tes Kontribusi (Essay)</h2>
-                <div class="question-block"><label>1. Selain menjalankan tugas-tugas yang sudah ditentukan, seperti inovasi atau ide kreatif apa yang ingin Anda bawa untuk membantu mengembangkan Asa Jiwa Foundation? Jelaskan idenanya dan potensi dampaknya.</label><textarea name="cont_1" required></textarea></div>
-                <div class="question-block"><label>2. Kontribusi tidak selalu berupa ide besar. Deskripsikan peran kecil atau tugas 'di balik layar' yang menurut Anda sangat penting untuk kelancaran operasional organisasi, dan mengapa Anda bersedia melakukannya.</label><textarea name="cont_2" required></textarea></div>
-                <div class="question-block"><label>3. Setiap orang memiliki jaringan dan keahlian unik. Keahlian atau jaringan apa yang Anda miliki yang dapat Anda manfaatkan untuk mendukung misi dan program-program Asa Jiwa Foundation?</label><textarea name="cont_3" required></textarea></div>
-                <div class="question-block"><label>4. Bagaimana Anda menjaga semangat dan motivasi Anda untuk terus berkontribusi, bahkan di tengah tantangan, kelelahan, atau ketika hasil dari kerja keras tidak langsung terlihat?</label><textarea name="cont_4" required></textarea></div>
-                <div class="question-block"><label>5. Asa Jiwa Foundation fokus pada kesehatan jiwa. Bagaimana pemahaman Anda tentang isu ini, dan bagaimana Anda pribadi ingin berkontribusi untuk mengurangi stigma dan meningkatkan akses terhadap dukungan kesehatan jiwa di masyarakat?</label><textarea name="cont_5" required></textarea></div>
-            </div>
-            
-            <div class="form-section">
-                <h2>Tes Pengetahuan Kesehatan (Pilihan Ganda)</h2>
-                <p><em>Pilihlah satu jawaban yang paling benar untuk setiap pertanyaan berikut.</em></p>
+            <!-- Dashboard Section -->
+            <div class="content-section active" id="dashboard">
+                <h2 class="mb-4">Dashboard Utama</h2>
                 
-                <div class="multiple-choice-question">
-                    <p>1. Apa yang dimaksud dengan 'stigma' dalam konteks kesehatan jiwa?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_1" value="a">a. Rasa malu individu untuk mencari bantuan profesional.</label>
-                        <label><input type="radio" name="pg_1" value="b">b. Keyakinan bahwa orang dengan masalah kesehatan jiwa adalah berbahaya dan tidak bisa disembuhkan.</label>
-                        <label><input type="radio" name="pg_1" value="c">c. Gejala fisik yang menyertai kondisi kesehatan jiwa.</label>
-                        <label><input type="radio" name="pg_1" value="d">d. Diagnosis resmi dari seorang psikiater.</label>
+                <div class="row">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="stat-card primary">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h3 id="totalPengurus">12</h3>
+                                    <p>Pengurus</p>
+                                </div>
+                                <div>
+                                    <i class="fas fa-user-tie fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="stat-card success">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h3 id="totalAnggota">45</h3>
+                                    <p>Anggota</p>
+                                </div>
+                                <div>
+                                    <i class="fas fa-users fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="stat-card warning">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h3 id="totalKegiatan">8</h3>
+                                    <p>Kegiatan</p>
+                                </div>
+                                <div>
+                                    <i class="fas fa-calendar-check fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="stat-card danger">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h3 id="totalNotifikasi">3</h3>
+                                    <p>Notifikasi</p>
+                                </div>
+                                <div>
+                                    <i class="fas fa-bell fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="multiple-choice-question">
-                    <p>2. Manakah dari berikut ini yang BUKKAN merupakan tanda-tanda umum dari gangguan kecemasan?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_2" value="a">a. Detak jantung yang lebih cepat.</label>
-                        <label><input type="radio" name="pg_2" value="b">b. Merasa sangat khawatir tentang berbagai hal yang tidak pasti.</label>
-                        <label><input type="radio" name="pg_2" value="c">c. Merasa sangat bahagia dan berenergi sepanjang waktu.</label>
-                        <label><input type="radio" name="pg_2" value="d">d> Sulit berkonsentrasi atau merasa pikiran kosong.</label>
+                
+                <div class="row mt-4">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Kegiatan Terkini</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Nama Kegiatan</th>
+                                                <th>Tanggal</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recentActivities">
+                                            <tr>
+                                                <td>Pelatihan Konseling Dasar</td>
+                                                <td>15 Juni 2023</td>
+                                                <td><span class="badge bg-success">Selesai</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Bakti Sosial Ramadhan</td>
+                                                <td>20 April 2023</td>
+                                                <td><span class="badge bg-success">Selesai</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Seminar Kesehatan Mental</td>
+                                                <td>10 Mei 2023</td>
+                                                <td><span class="badge bg-warning">Berlangsung</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <div class="multiple-choice-question">
-                    <p>3. Apa peran utama dari 'active listening' (mendengar aktif) dalam memberikan dukungan emosional kepada seseorang?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_3" value="a">a. Segera memberikan solusi untuk masalah yang dihadapi.</label>
-                        <label><input type="radio" name="pg_3" value="b">b. Mendengarkan dengan penuh perhatian tanpa menghakimi, dan menunjukkan bahwa Anda memahami perasaan mereka.</label>
-                        <label><input type="radio" name="pg_3" value="c">c"> Membagi pengalaman serupa untuk membuat mereka merasa lebih baik.</label>
-                        <label><input type="radio" name="pg_3" value="d">d"> Mengalihkan pembicaraan ke topik yang lebih ringan.</label>
-                    </div>
-                </div>
-
-                <div class="multiple-choice-question">
-                    <p>4. Apa yang dimaksud dengan 'self-care'?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_4" value="a">a. Kegiatan yang dilakukan untuk menjaga kesehatan fisik, mental, dan emosional.</label>
-                        <label><input type="radio" name="pg_4" value="b">b. Hanya beristirahat saat sudah merasa sangat lelah.</label>
-                        <label><input type="radio" name="pg_4" value="c">c. Bergantung pada orang lain untuk memenuhi kebutuhan emosional.</label>
-                        <label><input type="radio" name="pg_4" value="d">d. Menghindari semua situasi yang menimbulkan stres.</label>
-                    </div>
-                </div>
-
-                <div class="multiple-choice-question">
-                    <p>5. Apa dampak jangka panjang dari stres kronis terhadap kesehatan fisik?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_5" value="a">a. Meningkatkan daya tahan tubuh terhadap penyakit.</label>
-                        <label><input type="radio" name="pg_5" value="b">b"> Dapat meningkatkan risiko penyakit jantung, tekanan darah tinggi, dan melemahkan sistem kekebalan tubuh.</label>
-                        <label><input type="radio" name="pg_5" value="c">c"> Tidak ada dampak signifikan pada kesehatan fisik.</label>
-                        <label><input type="radio" name="pg_5" value="d">d"> Hanya mempengaruhi suasana hati.</label>
-                    </div>
-                </div>
-
-                <div class="multiple-choice-question">
-                    <p>6. Apa perbedaan antara psikolog dan psikiater?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_6" value="a">a> Psikolog adalah dokter yang bisa meresepkan obat, sedangkan psikiater tidak.</label>
-                        <label><input type="radio" name="pg_6" value="b">> Psikiater adalah dokter spesialis yang bisa mendiagnosis gangguan jiwa dan meresepkan obat, sedangkan psikolog fokus pada terapi bicara dan asesmen.</label>
-                        <label><input type="radio" name="pg_6" value="c">> Tidak ada perbedaan, kedua istilah tersebut sama.</label>
-                        <label><input type="radio" name="pg_6" value="d">> Psikolog bekerja di rumah sakit, sedangkan psikiater praktik di klinik swasta.</label>
-                    </div>
-                </div>
-
-                <div class="multiple-choice-question">
-                    <p>7. Apa tujuan dari teknik pernapasan deep breathing (pernapasan dalam) dalam mengelola stres?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_7" value="a">a> Untuk meningkatkan kapasitas paru-paru.</label>
-                        <label><input type="radio" name="pg_7" value="b">> Untuk menenangkan sistem saraf simpatik, menurunkan detak jantung, dan menurunkan tekanan darah.</label>
-                        <label><input type="radio" name="pg_7" value="c">> Untuk mengalihkan pikiran dari sumber stres.</label>
-                        <label><input type="radio" name="pg_7" value="d">> Sebagai bentuk latihan fisik.</label>
-                    </div>
-                </div>
-
-                <div class="multiple-choice-question">
-                    <p>8. Apa yang dimaksud dengan 'burnout'?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_8" value="a">a"> Kondisi kelelahan emosional, fisik, dan mental yang disebabkan oleh stres berkepanjangan di tempat kerja atau lingkungan yang terlalu menuntut.</label>
-                        <label><input type="radio" name="pg_8" value="b">> Kehilangan minat sepenuhnya terhadap pekerjaan atau hobi.</label>
-                        <label><input type="radio" name="pg_8" value="c">> Perasaan cemas yang berlebihan sebelum memulai tugas.</label>
-                        <label><input type="radio" name="pg_8" value="d">> Kondisi di mana seseorang bekerja terlalu keras dalam waktu singkat.</label>
-                    </div>
-                </div>
-
-                <div class="multiple-choice-question">
-                    <p>9. Mengapa penting untuk membicarakan kesehatan mental secara terbuka di masyarakat?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_9" value="a">> Untuk mengurangi stigma, mendorong orang untuk mencari bantuan, dan menciptakan lingkungan yang lebih mendukung.</label>
-                        <label><input type="radio" name="pg_9" value="b">> Agar orang menjadi lebih fokus pada masalah kesehatan fisik.</label>
-                        <label><input type="radio" name="pg_9" value="c">> Untuk memastikan semua orang didiagnosis dengan gangguan jiwa.</label>
-                        <label><input type="radio" name="pg_9" value="d">> Hanya untuk kepentingan kampanye media sosial.</label>
-                    </div>
-                </div>
-
-                <div class="multiple-choice-question">
-                    <p>10. Apa yang harus menjadi langkah pertama jika Anda curiga teman Anda sedang mengalami krisis kesehatan jiwa?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_10" value="a">> Mengabaikannya dan berharap ia akan baik-baik saja sendiri.</label>
-                        <label><input type="radio" name="pg_10" value="b">> Mendekatinya, mendengarkan tanpa menghakimi, dan menawarkan bantuan untuk mencari profesional.</label>
-                        <label><input type="radio" name="pg_10" value="c">> Memberinya nasihat tentang cara mengatasi masalahnya.</label>
-                        <label><input type="radio" name="pg_10" value="d">> Menceritakan pengalaman Anda kepada orang lain.</label>
-                    </div>
-                </div>
-
-                <div class="multiple-choice-question">
-                    <p>11. Manakah dari berikut ini yang merupakan contoh dari 'boundary' (batasan) yang sehat dalam hubungan?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_11" value="a">> Mengatakan 'iya' untuk semua permintaan agar tidak mengecewakan orang lain.</label>
-                        <label><input type="radio" name="pg_11" value="b">> Jujur tentang apa yang bisa dan tidak bisa Anda lakukan, dan menghormati batasan orang lain.</label>
-                        <label><input type="radio" name="pg_11" value="c">> Membagikan semua masalah pribadi Anda kepada teman dekat.</label>
-                        <label><input type="radio" name="pg_11" value="d">> Selalu tersedia 24/7 untuk teman yang membutuhkan bantuan.</label>
-                    </div>
-                </div>
-
-                <div class="multiple-choice-question">
-                    <p>12. Apa manfaat dari terapi kelompok (group therapy) dalam konteks kesehatan jiwa?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_12" value="a">> Memberikan rasa terisolasi dan membuat peserta merasa lebih sendirian.</label>
-                        <label><input type="radio" name="pg_12" value="b">> Menyediakan dukungan sosial, mengurangi rasa sendirian, dan memungkinkan peserta belajar dari pengalaman orang lain dalam situasi yang aman.</label>
-                        <label><input type="radio" name="pg_12" value="c">> Lebih murah daripada terapi individu.</label>
-                        <label><input type="radio" name="pg_12" value="d">> Hanya efektif untuk masalah yang sangat ringan.</label>
-                    </div>
-                </div>
-
-                <div class="multiple-choice-question">
-                  <p>13. Apa yang dimaksud dengan 'mindfulness' (kesadaran penuh)?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_13" value="a">> Kemampuan untuk melakukan banyak hal sekaligus.</label>
-                        <label><input type="radio" name="pg_13" value="b">> Kondisi di mana pikiran benar-benar kosong.</label>
-                        <label><input type="radio" name="pg_13" value="c">> Menyadari dan sepenuhnya hadir di saat ini, tanpa menghakimi pengalaman di dalam diri atau di sekitar.</label>
-                        <label><input type="radio" name="pg_13" value="d">> Merencanakan masa depan dengan sangat detail.</label>
-                    </div>
-                </div>
-
-                <div class="multiple-choice-question">
-                    <p>14. Faktor apa yang paling signifikan yang dapat meningkatkan risiko seseorang mengalami masalah kesehatan jiwa?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_14" value="a">> Genetika dan faktor biologis.</label>
-                        <label><input type="radio" name="pg_14" value="b">> Pengalaman traumatis di masa lalu.</label>
-                        <label><input type="radio" name="pg_14" value="c">> Stres kronis, isolasi sosial, dan kurangnya akses ke dukungan.</label>
-><label><input type="radio" name="pg_14" value="d">> Semua jawaban di atas benar dan seringkali berinteraksi.</label>
-                    </div>
-                </div>
-
-                <div class="multiple-choice-question">
-                    <p>15. Apa tujuan utama dari kampanye kesehatan jiwa seperti yang dilakukan oleh Asa Jiwa Foundation?</p>
-                    <div class="options">
-                        <label><input type="radio" name="pg_15" value="a">> Untuk mengumpulkan dana untuk penelitian.</label>
-                        <label><input type="radio" name="pg_15" value="b">> Untuk mendidik publik, mengurangi stigma, dan mendorong orang untuk mencari bantuan, serta mendorong kebijakan yang mendukung kesehatan jiwa.</label>
-                       label><input type="radio" name="pg_15" value="c">> Untuk menggantikan peran profesional kesehatan jiwa.</label>
-                        <label><input type="radio" name="pg_15" value="d">> Hanya untuk menyediakan layanan konseling gratis.</label>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Notifikasi</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-start mb-3">
+                                    <i class="fas fa-exclamation-circle text-warning me-2 mt-1"></i>
+                                    <div>
+                                        <p class="mb-0">Rapat pengurus akan dilaksanakan besok pukul 14.00</p>
+                                        <small class="text-muted">2 jam yang lalu</small>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-start mb-3">
+                                    <i class="fas fa-info-circle text-info me-2 mt-1"></i>
+                                    <div>
+                                        <p class="mb-0">Dokumen proposal kegiatan baru telah diupload</p>
+                                        <small class="text-muted">1 hari yang lalu</small>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-check-circle text-success me-2 mt-1"></i>
+                                    <div>
+                                        <p class="mb-0">Absensi bulan April telah selesai</p>
+                                        <small class="text-muted">3 hari yang lalu</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Attendance Section -->
+            <div class="content-section" id="attendance">
+                <h2 class="mb-4">Daftar Hadir / Absensi</h2>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Tambah Peserta</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="addAttendanceForm">
+                                    <div class="mb-3">
+                                        <label for="attendanceName" class="form-label">Nama Peserta</label>
+                                        <input type="text" class="form-control" id="attendanceName" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="attendanceDate" class="form-label">Tanggal</label>
+                                        <input type="date" class="form-control" id="attendanceDate" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="attendanceStatus" class="form-label">Status Kehadiran</label>
+                                        <select class="form-select" id="attendanceStatus" required>
+                                            <option value="Hadir">Hadir</option>
+                                            <option value="Izin">Izin</option>
+                                            <option value="Tidak Hadir">Tidak Hadir</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Tambah</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5>Daftar Hadir</h5>
+                                <button class="btn btn-sm btn-success" id="exportCsvBtn">
+                                    <i class="fas fa-file-csv"></i> Export CSV
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table class="table table-striped" id="attendanceTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Nama</th>
+                                                <th>Tanggal</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="attendanceList">
+                                            <!-- Data akan diisi dari localStorage -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Section -->
+            <div class="content-section" id="performance">
+                <h2 class="mb-4">Penilaian Kinerja Pengurus & Anggota</h2>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Input Penilaian</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="addPerformanceForm">
+                                    <div class="mb-3">
+                                        <label for="performanceName" class="form-label">Nama</label>
+                                        <input type="text" class="form-control" id="performanceName" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="performancePosition" class="form-label">Jabatan</label>
+                                        <input type="text" class="form-control" id="performancePosition" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="performanceScore" class="form-label">Skor (0-10)</label>
+                                        <input type="number" class="form-control" id="performanceScore" min="0" max="10" step="0.1" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Tambah Penilaian</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Statistik Penilaian</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Rata-rata Skor:</span>
+                                        <span class="fw-bold" id="averageScore">0</span>
+                                    </div>
+                                    <div class="progress mt-2">
+                                        <div class="progress-bar" role="progressbar" id="averageProgressBar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="10"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Skor Tertinggi:</span>
+                                        <span class="fw-bold" id="maxScore">0</span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Skor Terendah:</span>
+                                        <span class="fw-bold" id="minScore">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Hasil Penilaian</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="table table-striped" id="performanceTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Jabatan</th>
+                                        <th>Skor</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                    </thead>
+                                <tbody id="performanceList">
+                                    <!-- Data akan diisi dari localStorage -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Members Section -->
+            <div class="content-section" id="members">
+                <h2 class="mb-4">Data Anggota & Relawan</h2>
+                
+                <div class="mb-4">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+                        <i class="fas fa-plus"></i> Tambah Anggota
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Daftar Anggota</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="table table-striped" id="membersTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Email</th>
+                                        <th>Telepon</th>
+                                        <th>Divisi</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="membersList">
+                                    <!-- Data akan diisi dari localStorage -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Organization Structure Section -->
+            <div class="content-section" id="organization">
+                <h2 class="mb-4">Struktur Organisasi</h2>
+
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5>Struktur Organisasi AJF</h5>
+                        <button class="btn btn-sm btn-primary" id="editOrgStructureBtn">
+                            <i class="fas fa-edit"></i> Edit Struktur
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="org-chart" id="orgChart">
+                            <!-- Struktur organisasi akan diisi dari localStorage atau default -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Programs Section -->
+            <div class="content-section" id="programs">
+                <h2 class="mb-4">Manajemen Program & Kegiatan</h2>
+                
+                <div class="mb-4">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProgramModal">
+                        <i class="fas fa-plus"></i> Tambah Program/Kegiatan
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Daftar Program & Kegiatan</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container">
+                            <table class="table table-striped" id="programsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nama Kegiatan</th>
+                                        <th>Tanggal</th>
+                                        <th>Lokasi</th>
+                                        <th>Status</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="programsList">
+                                    <!-- Data akan diisi dari localStorage -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                                            </div>
+
+            <!-- Documents Section -->
+            <div class="content-section" id="documents">
+                <h2 class="mb-4">Dokumen & Arsip Digital</h2>
+                
+                <div class="mb-4">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addDocumentModal">
+                        <i class="fas fa-plus"></i> Upload Dokumen
+                    </button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Dokumen & Arsip</h5>
+                    </div>
+                    <div class="card-body" id="documentsList">
+                        <!-- Dokumen akan diisi dari localStorage -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forum Section -->
+            <div class="content-section" id="forum">
+                <h2 class="mb-4">Forum Diskusi Internal</h2>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>Buat Postingan Baru</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="addForumPostForm">
+                            <div class="mb-3">
+                                <label for="forumTitle" class="form-label">Judul</label>
+                                <input type="text" class="form-control" id="forumTitle" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="forumContent" class="form-label">Isi</label>
+                                <textarea class="form-control" id="forumContent" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Posting</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Thread Diskusi</h5>
+                    </div>
+                    <div class="card-body" id="forumPosts">
+                        <!-- Postingan forum akan diisi dari localStorage -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Section -->
+            <div class="content-section" id="reports">
+                <h2 class="mb-4">Laporan & Statistik</h2>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Grafik Kehadiran</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="attendanceChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Distribusi Anggota per Divisi</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="divisionChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Statistik Kinerja</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="performanceChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Jumlah Kegiatan per Bulan</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="activitiesChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="content-section" id="settings">
+                <h2 class="mb-4">Pengaturan Sistem</h2>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Manajemen Akun</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="accountSettingsForm">
+                                    <div class="mb-3">
+                                        <label for="currentEmail" class="form-label">Email Saat Ini</label>
+                                        <input type="email" class="form-control" id="currentEmail" value="asajiwafoundation@gmail.com" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="newPassword" class="form-label">Password Baru</label>
+                                        <input type="password" class="form-control" id="newPassword">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="confirmPassword" class="form-label">Konfirmasi Password</label>
+                                        <input type="password" class="form-control" id="confirmPassword">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Update Password</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Profil Yayasan</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="foundationProfileForm">
+                                    <div class="mb-3">
+                                        <label for="foundationName" class="form-label">Nama Yayasan</label>
+                                        <input type="text" class="form-control" id="foundationName" value="Asa Jiwa Foundation" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="foundationAddress" class="form-label">Alamat</label>
+                                        <textarea class="form-control" id="foundationAddress" rows="2">Jl. Contoh No. 123, Jakarta</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="foundationPhone" class="form-label">Telepon</label>
+                                        <input type="tel" class="form-control" id="foundationPhone" value="(021) 12345678">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="foundationEmail" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="foundationEmail" value="info@asajiwafoundation.org">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>Reset Data</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Anda dapat mereset semua data yang tersimpan di sistem ini. Tindakan ini tidak dapat dibatalkan.</p>
+                        <button class="btn btn-danger" id="resetDataBtn">Reset Semua Data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Member Modal -->
+    <div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addMemberModalLabel">Tambah Anggota Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addMemberForm">
+                        <div class="mb-3">
+                            <label for="memberName" class="form-label">Nama Lengkap</label>
+                            <input type="text" class="form-control" id="memberName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="memberEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="memberEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="memberPhone" class="form-label">Telepon</label>
+                            <input type="tel" class="form-control" id="memberPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="memberDivision" class="form-label">Divisi</label>
+                            <select class="form-select" id="memberDivision" required>
+                                <option value="">Pilih Divisi</option>
+                                <option value="Ketua Umum">Ketua Umum</option>
+                                <option value="Wakil Ketua Umum">Wakil Ketua Umum</option>
+                                <option value="Sekretaris Umum">Sekretaris Umum</option>
+                                <option value="Bendahara Umum">Bendahara Umum</option>
+                                <option value="HRD">Divisi HRD</option>
+                                <option value="PDD">Divisi PDD</option>
+                                <option value="Program & Event">Divisi Program & Event</option>
+                                <option value="RISKAN">Divisi Riset & Kajian (RISKAN)</option>
+                                <option value="HUMAS">Divisi Kemitraan & Relasi (HUMAS)</option>
+                                <option value="Konseling & Pendampingan">Divisi Konseling & Pendampingan</option>
+                                <option value="KREMEDIA">Divisi Kreatif & Media (KREMEDIA)</option>
+                                <option value="IT">Tim IT</option>
+                                <option value="Relawan">Tim Relawan</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="memberStatus" class="form-label">Status</label>
+                            <select class="form-select" id="memberStatus" required>
+                                <option value="Aktif">Aktif</option>
+                                <option value="Tidak Aktif">Tidak Aktif</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Program Modal -->
+    <div class="modal fade" id="addProgramModal" tabindex="-1" aria-labelledby="addProgramModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProgramModalLabel">Tambah Program/Kegiatan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProgramForm">
+                        <div class="mb-3">
+                            <label for="programName" class="form-label">Nama Kegiatan</label>
+                            <input type="text" class="form-control" id="programName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="programDate" class="form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="programDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="programLocation" class="form-label">Lokasi</label>
+                            <input type="text" class="form-control" id="programLocation" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="programStatus" class="form-label">Status</label>
+                            <select class="form-select" id="programStatus" required>
+                                <option value="Rencana">Rencana</option>
+                                <option value="Berlangsung">Berlangsung</option>
+                                <option value="Selesai">Selesai</option>
+                                <option value="Dibatalkan">Dibatalkan</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Document Modal -->
+    <div class="modal fade" id="addDocumentModal" tabindex="-1" aria-labelledby="addDocumentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addDocumentModalLabel">Upload Dokumen</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addDocumentForm">
+                        <div class="mb-3">
+                            <label for="documentName" class="form-label">Nama Dokumen</label>
+                            <input type="text" class="form-control" id="documentName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="documentType" class="form-label">Tipe Dokumen</label>
+                            <select class="form-select" id="documentType" required>
+                                <option value="">Pilih Tipe</option>
+                                <option value="PDF">PDF</option>
+                                <option value="Word">Word</option>
+                                <option value="Excel">Excel</option>
+                                <option value="PowerPoint">PowerPoint</option>
+                                <option value="Gambar">Gambar</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="documentLink" class="form-label">Link Dokumen</label>
+                            <input type="url" class="form-control" id="documentLink" placeholder="https://example.com/document.pdf" required>
+                            <div class="form-text">Masukkan link ke dokumen yang sudah diupload ke cloud storage</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="documentDescription" class="form-label">Deskripsi</label>
+                            <textarea class="form-control" id="documentDescription" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Organization Structure Modal -->
+    <div class="modal fade" id="editOrgStructureModal" tabindex="-1" aria-labelledby="editOrgStructureModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editOrgStructureModalLabel">Edit Struktur Organisasi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editOrgStructureForm">
+                        <div id="orgStructureEditor">
+                            <!-- Struktur organisasi editor akan diisi dari JavaScript -->
+                        </div>
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Inisialisasi data di localStorage jika belum ada
+        if (!localStorage.getItem('ajfAttendance')) {
+            localStorage.setItem('ajfAttendance', JSON.stringify([
+                { id: 1, name: 'Ahmad Fauzi', date: '2023-05-01', status: 'Hadir' },
+                { id: 2, name: 'Siti Nurhaliza', date: '2023-05-01', status: 'Hadir' },
+                { id: 3, name: 'Budi Santoso', date: '2023-05-01', status: 'Izin' }
+            ]));
+        }
+
+        if (!localStorage.getItem('ajfPerformance')) {
+            localStorage.setItem('ajfPerformance', JSON.stringify([
+                { id: 1, name: 'Ahmad Fauzi', position: 'Ketua Umum', score: 8.5 },
+                { id: 2, name: 'Siti Nurhaliza', position: 'Sekretaris Umum', score: 9.0 },
+                { id: 3, name: 'Budi Santoso', position: 'Bendahara Umum', score: 7.5 }
+            ]));
+            }
+
+        if (!localStorage.getItem('ajfMembers')) {
+            localStorage.setItem('ajfMembers', JSON.stringify([
+                { id: 1, name: 'Ahmad Fauzi', email: 'ahmad@example.com', phone: '08123456789', division: 'Ketua Umum', status: 'Aktif' },
+                { id: 2, name: 'Siti Nurhaliza', email: 'siti@example.com', phone: '08234567890', division: 'Sekretaris Umum', status: 'Aktif' },
+                { id: 3, name: 'Budi Santoso', email: 'budi@example.com', phone: '08345678901', division: 'Bendahara Umum', status: 'Aktif' }
+            ]));
+        }
+
+        if (!localStorage.getItem('ajfPrograms')) {
+            localStorage.setItem('ajfPrograms', JSON.stringify([
+                { id: 1, name: 'Pelatihan Konseling Dasar', date: '2023-06-15', location: 'Kantor AJF', status: 'Selesai' },
+                { id: 2, name: 'Bakti Sosial Ramadhan', date: '2023-04-20', location: 'Panti Asuhan', status: 'Selesai' },
+                { id: 3, name: 'Seminar Kesehatan Mental', date: '2023-05-10', location: 'Auditorium', status: 'Berlangsung' }
+            ]));
+        }
+
+        if (!localStorage.getItem('ajfDocuments')) {
+            localStorage.setItem('ajfDocuments', JSON.stringify([
+                { id: 1, name: 'Laporan Tahunan 2022', type: 'PDF', link: 'https://example.com/laporan2022.pdf', description: 'Laporan kegiatan tahun 2022' },
+                { id: 2, name: 'Proposal Kegiatan', type: 'Word', link: 'https://example.com/proposal.docx', description: 'Proposal kegiatan semester 1' },
+                { id: 3, name: 'Anggaran Dasar', type: 'PDF', link: 'https://example.com/anggaran_dasar.pdf', description: 'Anggaran dasar yayasan' }
+            ]));
+        }
+
+        if (!localStorage.getItem('ajfForumPosts')) {
+            localStorage.setItem('ajfForumPosts', JSON.stringify([
+                { id: 1, title: 'Rapat Koordinasi Bulanan', content: 'Rapat koordinasi akan dilaksanakan pada tanggal 15 Juni 2023 di kantor AJF. Mohon seluruh pengurus hadir tepat waktu.', author: 'Admin', date: '2023-06-01' },
+                { id: 2, title: 'Penggalangan Dana', content: 'Kita akan mengadakan penggalangan Dana untuk membantu korban bencana alam. Mohon dukungan dari seluruh anggota.', author: 'Budi Santoso', date: '2023-05-28' },
+                { id: 3, title: 'Pelatihan Volunteer', content: 'Bagi anggota yang ingin mengikuti pelatihan volunteer, silahkan mendaftar ke sekretariat.', author: 'Siti Nurhaliza', date: '2023-05-20' }
+            ]));
+        }
+
+        if (!localStorage.getItem('ajfOrgStructure')) {
+            const defaultOrgStructure = {
+                level1: ['Founder'],
+                level2: ['Ketua Umum'],
+                level3: ['Wakil Ketua Umum', 'Sekretaris Umum', 'Bendahara Umum'],
+                level4: ['Divisi HRD', 'Divisi PDD', 'Divisi Program & Event', 'Divisi Riset & Kajian (RISKAN)', 'Divisi Kemitraan & Relasi (HUMAS)', 'Divisi Konseling & Pendampingan', 'Divisi Kreatif & Media (KREMEDIA)', 'Tim IT', 'Tim Relawan']
+            };
+            localStorage.setItem('ajfOrgStructure', JSON.stringify(defaultOrgStructure));
+        }
+
+        if (!localStorage.getItem('ajfFoundationProfile')) {
+            localStorage.setItem('ajfFoundationProfile', JSON.stringify({
+                name: 'Asa Jiwa Foundation',
+                address: 'Jl. Contoh No. 123, Jakarta',
+                phone: '(021) 12345678',
+                email: 'info@asajiwafoundation.org'
+            }));
+        }
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            <button type="submit" class="success">Kirim Jawaban & Dinilai Otomatis</button>
-            <button type="button" class="danger" onclick="showLandingPage()">Batal</button>
-        </form>
-    </div>
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (email === 'asajiwafoundation@gmail.com' && password === 'ASAJIWAFOUNDATION') {
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboardPage').style.display = 'block';
+                initializeDashboard();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        });
 
-    <!-- VIEW 3: Dashboard Admin Menu -->
-    <div id="adminDashboardMenuPage" class="container hidden">
-        <div class="admin-nav"><h2>Dashboard Admin</h2><button onclick="logoutAdmin()" class="danger">Logout Admin</button></div>
-        <h2 style="text-align: center; border: none;">Pilih Menu yang Ingin Dikelola</h2>
-        <div class="admin-menu-card">
-            <div class="card" onclick="loadAdminAssessmentPage()"><h3>📝 Assessment Peserta</h3><p>Kelola data peserta, nilai, status, dan catatan.</p></div>
-            <div class="card" onclick="loadAdminStructurePage()"><h3>👥 Struktur Kepengurusan</h3><p>Atur dan lihat struktur kepengurusan aktif.</p></div>
-            <div class="card" onclick="loadAdminPerformanceManagerPage()"><h3>📊 Penilaian Kerja Pengurus</h3><p>Beri penilaian kinerja untuk pengurus aktif.</p></div>
-            <div class="card" onclick="loadAdminPerformanceMemberPage()"><h3>📝 Penilaian Kerja Anggota</h3><p>Beri penilaian kinerja untuk anggota aktif.</p></div>
-            <div class="card" onclick="loadAdminAnnouncementPage()"><h3>📢 Pengelolaan Pengumuman</h3><p>Buat atau edit pengumuman untuk peserta.</p></div>
-        </div>
-    </div>
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('dashboardPage').style.display = 'none';
+            document.getElementById('loginPage').style.display = 'flex';
+        });
 
-    <!-- VIEW 4: Dashboard Admin Assessment -->
-  <div id="adminAssessmentPage" class="container hidden">
-        <div class="admin-nav"><h2>Dashboard Admin - Assessment Peserta</h2><button onclick="backToAdminMenu()">&larr; Kembali ke Menu</button></div>
-        <div class="card"><h2>Daftar Peserta & Penilaian</h2><table id="participantTable"><thead><tr><th>Nama</th><th>Email</th><th>Total Nilai</th><th>Status</th><th>Jabatan</th><th>Catatan Admin</th><th>Aksi</th></tr></thead><tbody id="participantTableBody"><tr><td colspan="7" class="loading">Memuat data...</td></tr></tbody></table></div>
-        <div class="card"><h2>Dashboard Top 10 Peserta</h2><table id="topTenTable"><thead><tr><th>Peringkat</th><th>Nama</th><th>Total Nilai</th><th>Status</th><th>Jabatan</th></tr></thead><tbody id="topTenTableBody"><tr><td colspan="5" class="loading">Memuat data...</td></tr></tbody></table></div>
-    </div>
-    
-    <!-- VIEW 5: Modal Update Status -->
-    <div id="updateStatusModal" class="container hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; width: 90%; max-width: 500px; background: white; border: 2px solid var(--primary-color); border-radius: 10px; padding: 20px;">
-        <h3>Update Status & Jabatan</h3>
-        <label for="statusSelect">Pilih Status:</label>
-        <select id="statusSelect" onchange="handleStatusChange()"><option value="">-- Pilih Status --</option><option value="pending">Tertunda</option><option value="rejected">Tidak Lolos</option><option value="accepted-t2">Lolos (Tahap 2)</option><option value="accepted-role">Lolos (Jabatan)</option></select>
-        <div id="roleSelectionDiv" class="hidden">
-            <label for="roleSelect">Pilih Jabatan:</label>
-            <select id="roleSelect"><option value="">-- Pilih Jabatan --</option><option value="Divisi HRD">Divisi HRD</option><option value="Divisi PDD">Divisi PDD</option><option value="Divisi Program dan Event">Divisi Program dan Event</option><option value="Divisi Riset dan Kajian (RISKAN)">Divisi Riset dan Kajian (RISKAN)</option><option value="Divisi Kemitraan dan Relasi (HUMAS)">Divisi Kemitraan dan Relasi (HUMAS)</option><option value="Divisi Konseling dan Pendampingan">Divisi Konseling dan Pendampingan</option><option value="Divisi Kreatif dan Media (KREMEDIA)">Divisi Kreatif dan Media (KREMEDIA)</option><option value="Tim IT">Tim IT</option><option value="Tim Relawan">Tim Relawan</option></select>
-        </div>
-        <label for="adminNoteInput">Catatan Admin:</label>
-        <textarea id="adminNoteInput" rows="3" placeholder="Tambahkan catatan untuk peserta ini..."></textarea>
-        <div style="text-align: right; margin-top: 15px;">
-            <button onclick="closeUpdateStatusModal()" class="danger">Batal</button>
-            <button onclick="saveUpdatedStatus()" class="success">Simpan Perubahan</button>
-        </div>
-    </div>
-    <div id="modalOverlay" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+        // Toggle sidebar
+        document.getElementById('toggleSidebar').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+            document.getElementById('mainContent').classList.toggle('expanded');
+        });
 
-    <!-- VIEW 6: Halaman Struktur Kepengurusan -->
-    <div id="adminStructurePage" class="container hidden">
-        <div class="admin-nav"><h2>Dashboard Admin - Struktur Kepengurusan</h2><button onclick="backToAdminMenu()">&larr; Kembali ke Menu</button></div>
-        <div class="card"><h2>Struktur Kepengurusan Aktif</h2><p>Klik pada nama untuk mengubahnya dengan nama pengurus yang sudah lolos.</p><div class="structure-grid" id="structureGrid"></div><button onclick="saveStructure()" class="success" style="margin-top: 20px;">Simpan Struktur Kepengurusan</button></div>
-    </div>
+        // Navigation between sections
+        document.querySelectorAll('.sidebar-menu .nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.id !== 'logoutBtn') {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links and sections
+                    document.querySelectorAll('.sidebar-menu .nav-link').forEach(l => l.classList.remove('active'));
+                    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
 
-    <!-- VIEW 7: Halaman Penilaian Kinerja Pengurus -->
-    <div id="adminPerformanceManagerPage" class="container hidden">
-        <div class="admin-nav"><h2>Dashboard Admin - Penilaian Kerja Pengurus</h2><button onclick="backToAdminMenu()">&larr; Kembali ke Menu</button></div>
-        <div class="card"><h2>Form Penilaian Kinerja Pengurus</h2><form id="performanceManagerForm" class="performance-form"><div class="form-group"><label for="performerManagerName">Nama Pengurus:</label><select id="performerManagerName" required><option value="">-- Pilih Pengurus --</option></select></div><div class="form-group"><label>Komitmen terhadap Organisasi (Skala 1-5):</label><input type="number" name="commitment" min="1" max="5" required></div><div class="form-group"><label>Kualitas Kerja (Skala 1-5):</label><input type="number" name="quality" min="1" max="5" required></div><div class="form-group"><label>Kerjasama dalam Tim (Skala 1-5):</label><input type="number" name="teamwork" min="1" max="5" required></div><div class="form-group"><label>Inisiatif dan Kreativitas (Skala 1-5):</label><input type="number" name="initiative" min="1" max="5" required></div><div class="form-group"><label>Catatan Tambahan:</label><textarea name="notes" rows="4"></textarea></div><button type="submit" class="success">Simpan Penilaian</button></form></div>
-         <div class="card"><h2>Riwayat Penilaian Pengurus</h2><table id="performanceManagerHistoryTable"><thead><tr><th>Tanggal</th><th>Nama</th><th>Komitmen</th><th>Kualitas</th><th>Kerjasama</th><th>Inisiatif</th><th>Catatan</th></tr></thead><tbody id="performanceManagerHistoryBody"><tr><td colspan="7" class="loading">Belum ada data penilaian.</td></tr></tbody></table></div>
-    </div>
+                // Show corresponding section
+                    const sectionId = this.getAttribute('data-section');
+                    document.getElementById(sectionId).classList.add('active');
+                    
+                    // Load section-specific data
+                    loadSectionData(sectionId);
+                }
+            });
+        });
 
-    <!-- VIEW 8: Halaman Penilaian Kinerja Anggota -->
-    <div id="adminPerformanceMemberPage" class="container hidden">
-        <div class="admin-nav"><h2>Dashboard Admin - Penilaian Kerja Anggota</h2><button onclick="backToAdminMenu()">&larr; Kembali ke Menu</button></div>
-        <div class="card"><h2>Form Penilaian Kinerja Anggota</h2><form id="performanceMemberForm" class="performance-form"><div class="form-group"><label for="performerMemberName">Nama Anggota:</label><select id="performerMemberName" required><option value="">-- Pilih Anggota --</option></select></div><div class="form-group"><label>Keaktifan dalam Kegiatan (Skala 1-5):</label><input type="number" name="keaktifan" min="1" max="5" required></div><div class="form-group"><label>Disiplin dan Tanggung Jawab (Skala 1-5):</label><input type="number" name="disiplin" min="1" max="5" required></div><div class="form-group"><label>Kontribusi Ide dan Saran (Skala 1-5):</label><input type="number" name="kontribusi" min="1" max="5" required></div><div class="form-group"><label>Kemampuan Beradaptasi (Skala 1-5):</label><input type="number" name="adaptasi" min="1" max="5" required></div><div class="form-group"><label>Catatan Tambahan:</label><textarea name="notes" rows="4"></textarea></div><button type="submit" class="success">Simpan Penilaian</button></form></div>
-         <div class="card"><h2>Riwayat Penilaian Anggota</h2><table id="performanceMemberHistoryTable"><thead><tr><th>Tanggal</th><th>Nama</th><th>Keaktifan</th><th>Disiplin</th><th>Kontribusi</th><th>Adaptasi</th><th>Catatan</th></tr></thead><tbody id="performanceMemberHistoryBody"><tr><td colspan="7" class="loading">Belum ada data penilaian.</td></tr></tbody></table></div>
-    </div>
-    
-    <!-- VIEW 9: Halaman Pengelolaan Pengumuman Admin -->
-    <div id="adminAnnouncementPage" class="container hidden">
-        <div class="admin-nav"><h2>Dashboard Admin - Pengelolaan Pengumuman</h2><button onclick="backToAdminMenu()">&larr; Kembali ke Menu</button></div>
-        <div class="card"><h2>Pengelolaan Pengumuman</h2><p>Buat atau perbarui teks pengumuman yang akan muncul di halaman publik.</p><label for="announcementText">Teks Pengumuman:</label><textarea id="announcementText" rows="6" placeholder="Tulis pengumuman di sini..."></textarea><button onclick="saveAnnouncement()">Simpan Pengumuman</button></div>
-  </div>
+        // Initialize dashboard
+        function initializeDashboard() {
+            // Update statistics
+            const members = JSON.parse(localStorage.getItem('ajfMembers')) || [];
+            const programs = JSON.parse(localStorage.getItem('ajfPrograms')) || [];
+            
+            document.getElementById('totalPengurus').textContent = members.filter(m => 
+                ['Ketua Umum', 'Wakil Ketua Umum', 'Sekretaris Umum', 'Bendahara Umum'].includes(m.division)
+            ).length;
+            
+            document.getElementById('totalAnggota').textContent = members.length;
+            document.getElementById('totalKegiatan').textContent = programs.length;
+            
+            // Load recent activities
+            const activitiesList = document.getElementById('recentActivities');
+            activitiesList.innerHTML = '';
+            
+            programs.slice(0, 3).forEach(program => {
+                const statusClass = program.status === 'Selesai' ? 'bg-success' : 
+                                  program.status === 'Berlangsung' ? 'bg-warning' : 'bg-secondary';
+                
+                activitiesList.innerHTML += `
+                    <tr>
+                        <td>${program.name}</td>
+                        <td>${formatDate(program.date)}</td>
+                        <td><span class="badge ${statusClass}">${program.status}</span></td>
+                    </tr>
+                `;
+            });
+        }
 
-  <!-- VIEW 10: Halaman Pengumuman untuk Peserta -->
-    <div id="announcementPage" class="container hidden">
-        <h1>Pengumuman Hasil Assessment</h1>
-        <div id="announcementDisplay" class="announcement-box"><p class="loading">Memuat pengumuman...</p></div>
-        <div class="announcement-table-section"><h3>Hasil Penilaian Seluruh Peserta</h3><table id="publicResultTable"><thead><tr><th>Nama</th><th>Total Nilai</th><th>Status Kelulusan</th><th>Jabatan (Jika Lolos)</th></tr></thead><tbody id="publicResultTableBody"><tr><td colspan="4" class="loading">Memuat data...</td></tr></tbody></table></div>
-        <div class="announcement-table-section"><h3>10 Peserta dengan Nilai Tertinggi</h3><table id="publicTopTenTable"><thead><tr><th>Peringkat</th><th>Nama</th><th>Total Nilai</th><th>Status Kelulusan</th><th>Jabatan (Jika Lolos)</th></tr></thead><tbody id="publicTopTenTableBody"><tr><td colspan="5" class="loading">Memuat data...</td></tr></tbody></table></div>
-        <p style="text-align: center; margin-top: 30px;">Cek pengumuman secara berkala. Terima kasih atas partisertisasi Anda.</p>
-        <button onclick="showLandingPage()">Kembali ke Halaman Utama</button>
-    </div>
+        // Load section-specific data
+        function loadSectionData(sectionId) {
+            switch(sectionId) {
+                case 'attendance':
+                    loadAttendanceData();
+                    break;
+                case 'performance':
+                    loadPerformanceData();
+                    break;
+                case 'members':
+                    loadMembersData();
+                    break;
+                case 'organization':
+                    loadOrganizationData();
+                    break;
+                case 'programs':
+                    loadProgramsData();
+                    break;
+                case 'documents':
+                    loadDocumentsData();
+                    break;
+                case 'forum':
+                    loadForumData();
+                    break;
+                case 'reports':
+                    loadReportsData();
+                    break;
+                case 'settings':
+                    loadSettingsData();
+                    break;
+            }
+        }
 
-<script>
-    // --- KONFIGURASI & DATA ---
-    const STORAGE_KEY_PARTICIPANTS = 'asajiwa_participants_v5'; // Versi baru karena ada perubahan data
-    const STORAGE_KEY_ANNOUNCEMENT = 'asajiwa_announcement_v4';
-    const STORAGE_KEY_STRUCTURE = 'asajiwa_structure_v1';
-    const STORAGE_KEY_PERFORMANCE_MANAGER = 'asajiwa_performance_manager_v1';
-    const STORAGE_KEY_PERFORMANCE_MEMBER = 'asajiwa_performance_member_v1';
-    const ADMIN_EMAIL = "asajiwafoundation@gmail.com";
-    const ADMIN_PASSWORD = "ASAJIWAFOUNDATION";
-    const AVAILABLE_ROLES = ["Divisi HRD", "Divisi PDD", "Divisi Program dan Event", "Divisi Riset dan Kajian (RISKAN)", "Divisi Kemitraan dan Relasi (HUMAS)", "Divisi Konseling dan Pendampingan", "Divisi Kreatif dan Media (KREMEDIA)", "Tim IT", "Tim Relawan"];
-    const ORG_STRUCTURE = [{ title: "Founder", key: "founder" }, { title: "Ketua Umum (Ketum)", key: "ketum" }, { title: "Wakil Ketua Umum (Waketum)", key: "waketum" }, { title: "Sekretaris Umum (Sekum)", key: "sekum" }, { title: "Bendahara Umum (Bendum)", key: "bendum" }, { title: "Divisi HRD", key: "hrd" }, { title: "Divisi PDD", key: "pdd" }, { title: "Divisi Program dan Event", key: "progevent" }, { title: "Divisi Riset dan Kajian (RISKAN)", key: "riskan" }, { title: "Divisi Kemitraan dan Relasi (HUMAS)", key: "humas" }, { title: "Divisi Konseling dan Pendampingan", key: "konseling" }, { title: "Divisi Kreatif dan Media (KREMEDIA)", key: "kremedia" }, { Tim IT", key: "it" }, { title: "Tim Relawan", key: "relawan" }];
-    let currentEditingParticipantId = null;
+        // Load attendance data
+        function loadAttendanceData() {
+            const attendanceList = document.getElementById('attendanceList');
+            const attendanceData = JSON.parse(localStorage.getItem('ajfAttendance')) || [];
+            
+            attendanceList.innerHTML = '';
+            
+            attendanceData.forEach(att => {
+                const statusClass = att.status === 'Hadir' ? 'bg-success' : 
+                                  att.status === 'Izin' ? 'bg-warning' : 'bg-danger';
+                
+                attendanceList.innerHTML += `
+                    <tr>
+                        <td>${att.name}</td>
+                        <td>${formatDate(att.date)}</td>
+                        <td><span class="badge ${statusClass}">${att.status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-danger delete-attendance" data-id="${att.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
 
-    // --- FUNGSI UTILITAS ---
-    function showPage(pageId) { document.querySelectorAll('.container').forEach(page => page.classList.add('hidden')); document.getElementById(pageId).classList.remove('hidden'); }
-    function saveToLocalStorage(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
-    function loadFromLocalStorage(key, defaultValue = null) { const data = localStorage.getItem(key); return data ? JSON.parse(data) : defaultValue; }
-    
-    // --- FUNGSI HALAMAN UTAMA (LANDING PAGE) ---
-    function showLandingPage() { showPage('landingPage'); document.getElementById('loginError').style.display = 'none'; document.getElementById('adminEmailInput').value = ''; document.getElementById('adminPasswordInput').value = ''; }
-    function adminLogin() { const email = document.getElementById('adminEmailInput').value; const password = document.getElementById('adminPasswordInput').value; const errorDiv = document.getElementById('loginError'); if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) { alert('Login Admin Berhasil!'); loadAdminDashboardMenu(); } else { errorDiv.style.display = 'block'; } }
-    function showParticipantForm() { showPage('participantFormPage'); }
-    function showAnnouncementPage() { renderAnnouncementPage(); showPage('announcementPage'); }
+        // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-attendance').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteAttendance(id);
+                });
+            });
+        }
 
-    // --- FUNGSI FORM PESERTA & SIMULASI PENILAIAN (DIPERBARUI) ---
-    document.getElementById('assessmentForm').addEventListener('submit', async function(e) {
-        e.preventDefault(); const formData = new FormData(e.target);
-        const participantData = { id: Date.now(), name: formData.get('participantName'), email: formData.get('participantEmail'), answers: {}, scores: { pg_total: 0, psy: 0, lead: 0, cont: 0, total: 0 }, status: 'pending', evaluated: false, role: null, note: null };
-        // Kumpulkan jawaban essay
-        for (let [key, value] of formData.entries()) { if (key !== 'participantName' && key !== 'participantEmail' && !key.startsWith('pg_')) participantData.answers[key] = value; }
-        // Kumpulkan jawaban PG
-        for (let i = 1; i <= 15; i++) { const pgKey = `pg_${i}`; participantData.answers[pgKey] = formData.get(pgKey); }
-        
-        alert('Sedang memproses jawaban Anda...');
-        const submitButton = e.target.querySelector('button[type="submit"]'); const originalText = submitButton.innerText; submitButton.innerText = 'Memproses...'; submitButton.disabled = true;
-        await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 2000));
+        // Add attendance form
+        document.getElementById('addAttendanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('attendanceName').value;
+            const date = document.getElementById('attendanceDate').value;
+            const status = document.getElementById('attendanceStatus').value;
+            
+            const attendanceData = JSON.parse(localStorage.getItem('ajfAttendance')) || [];
+            const newId = attendanceData.length > 0 ? Math.max(...attendanceData.map(a => a.id)) + 1 : 1;
+            
+            attendanceData.push({
+                id: newId,
+                name: name,
+                date: date,
+                status: status
+            });
+            
+            localStorage.setItem('ajfAttendance', JSON.stringify(attendanceData));
+            
+            // Reset form
+            this.reset();
+            
+            // Reload data
+            loadAttendanceData();
+            
+            // Show success message
+            showToast('Data absensi berhasil ditambahkan');
+        });
 
-             // Simulasi penilaian PG (nilai per soal 10, total 150)
-        let pgScore = 0;
-        const pgAnswers = {
-            '1': 'b', '2': 'c', '3': 'b', '4': 'a', '5': 'b', '6': 'b', '7': 'b', '8': 'a', '9': 'a', '10': 'b',
-            '11': 'b', '12': 'b', '13': 'c', '14': 'd', '15': 'b'
-        };
-        for (let i = 1; i <= 15; i++) { if (participantData.answers[`pg_${i}`] === pgAnswers[i.toString()]) pgScore += 10; }
-        participantData.scores.pg_total = pgScore;
+        // Delete attendance
+        function deleteAttendance(id) {
+            const attendanceData = JSON.parse(localStorage.getItem('ajfAttendance')) || [];
+            const updatedData = attendanceData.filter(att => att.id !== id);
+            
+            localStorage.setItem('ajfAttendance', JSON.stringify(updatedData));
+            loadAttendanceData();
+            
+            showToast('Data absensi berhasil dihapus');
+                }
 
-        // Simulasi penilaian Essay (nilai per kategori 0-100, total 300)
-        participantData.scores.psy = Math.floor(Math.random() * 41) + 60;
-        participantData.scores.lead = Math.floor(Math.random() * 41) + 60;
-        participantData.scores.cont = Math.floor(Math.random() * 41) + 60;
-        
-        // Hitung total nilai
-        participantData.scores.total = participantData.scores.pg_total + participantData.scores.psy + participantData.scores.lead + participantData.scores.cont;
-        participantData.evaluated = true;
+        // Export CSV
+        document.getElementById('exportCsvBtn').addEventListener('click', function() {
+            const attendanceData = JSON.parse(localStorage.getItem('ajfAttendance')) || [];
+            
+            let csv = 'Nama,Tanggal,Status\n';
+            
+            attendanceData.forEach(att => {
+                csv += `${att.name},${att.date},${att.status}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'absensi_ajf.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            showToast('Data absensi berhasil diexport');
+        });
 
-        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []); participants.push(participantData); saveToLocalStorage(STORAGE_KEY_PARTICIPANTS, participants);
-        submitButton.innerText = originalText; submitButton.disabled = false;
-        const resultDiv = document.createElement('div'); resultDiv.className = 'result-box'; resultDiv.innerHTML = `<h4>Terima Kasih!</h4><p>Jawaban Anda telah berhasil dikirim dan dinilai. Hasil akan diumumkan melalui halaman pengumuman.</p><p><strong>Good luck!</strong></p>`;
-        e.target.appendChild(resultDiv); e.target.querySelector('button[type="submit"]').disabled = true;
-    });
+        // Load performance data
+        function loadPerformanceData() {
+            const performanceList = document.getElementById('performanceList');
+            const performanceData = JSON.parse(localStorage.getItem('ajfPerformance')) || [];
+            
+            performanceList.innerHTML = '';
+            
+            performanceData.forEach(perf => {
+                performanceList.innerHTML += `
+                    <tr>
+                        <td>${perf.name}</td>
+                        <td>${perf.position}</td>
+                        <td>${perf.score}</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger delete-performance" data-id="${perf.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
 
-    // --- FUNGSI DASHBOARD ADMIN MENU ---
-    function loadAdminDashboardMenu() { showPage('adminDashboardMenuPage'); }
-    function backToAdminMenu() { showPage('adminDashboardMenuPage'); }
-    function loadAdminAssessmentPage() { renderAssessmentPage(); showPage('adminAssessmentPage'); }
-    function loadAdminStructurePage() { renderStructurePage(); showPage('adminStructurePage'); }
-    function loadAdminPerformanceManagerPage() { renderPerformanceManagerPage(); showPage('adminPerformanceManagerPage'); }
-    function loadAdminPerformanceMemberPage() { renderPerformanceMemberPage(); showPage('adminPerformanceMemberPage'); }
-    function loadAdminAnnouncementPage() { loadAnnouncementForAdmin(); showPage('adminAnnouncementPage'); }
-    
-    // --- FUNGSI DASHBOARD ADMIN ASSESSMENT (DIPERBARUI) ---
-    function renderAssessmentPage() { renderParticipantTable(); renderTopTenTable(); }
-    function renderParticipantTable() {
-        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []);
-        const tbody = document.getElementById('participantTableBody'); tbody.innerHTML = '';
-        if (participants.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Belum ada data peserta.</td></tr>'; return; }
-        participants.forEach(p => {
-            const row = tbody.insertRow();
-            row.innerHTML = `
-                <td>${p.name}</td><td>${p.email}</td><td>${p.evaluated ? p.scores.total : 'Belum Dinilai'}</td>
-                <td><span class="status-badge status-${p.status}">${getStatusText(p.status)}</span></td>
-                <td>${p.role ? `<span class="role-badge">${p.role}</span>` : '-'}</td>
-                <td><textarea class="notes-textarea" id="note-${p.id}" placeholder="Tambahkan catatan..." onchange="saveNote(${p.id}, this.value)">${p.note || ''}</textarea></td>
-                <td><button onclick="openUpdateStatusModal(${p.id})">Update Status</button> <button onclick="deleteParticipant(${p.id})" class="danger">Hapus</button></td>
+        // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-performance').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deletePerformance(id);
+                });
+            });
+            
+            // Calculate statistics
+            if (performanceData.length > 0) {
+                const scores = performanceData.map(p => p.score);
+                const average = scores.reduce((a, b) => a + b, 0) / scores.length;
+                const max = Math.max(...scores);
+                const min = Math.min(...scores);
+                
+                document.getElementById('averageScore').textContent = average.toFixed(1);
+                document.getElementById('maxScore').textContent = max;
+                document.getElementById('minScore').textContent = min;
+                
+                // Update progress bar
+                const progressBar = document.getElementById('averageProgressBar');
+                progressBar.style.width = `${(average / 10) * 100}%`;
+                progressBar.setAttribute('aria-valuenow', average);
+            } else {
+                document.getElementById('averageScore').textContent = '0';
+                document.getElementById('maxScore').textContent = '0';
+                document.getElementById('minScore').textContent = '0';
+                
+                const progressBar = document.getElementById('averageProgressBar');
+                progressBar.style.width = '0%';
+                progressBar.setAttribute('aria-valuenow', '0');
+            }
+        }
+
+        // Add performance form
+        document.getElementById('addPerformanceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('performanceName').value;
+            const position = document.getElementById('performancePosition').value;
+            const score = parseFloat(document.getElementById('performanceScore').value);
+            
+            const performanceData = JSON.parse(localStorage.getItem('ajfPerformance')) || [];
+            const newId = performanceData.length > 0 ? Math.max(...performanceData.map(p => p.id)) + 1 : 1;
+            
+            performanceData.push({
+                id: newId,
+                name: name,
+                position: position,
+                score: score
+            });
+            
+            localStorage.setItem('ajfPerformance', JSON.stringify(performanceData));
+            
+            // Reset form
+            this.reset();
+            
+            // Reload data
+            loadPerformanceData();
+            
+            // Show success message
+            showToast('Data penilaian berhasil ditambahkan');
+        });
+
+        // Delete performance
+        function deletePerformance(id) {
+            const performanceData = JSON.parse(localStorage.getItem('ajfPerformance')) || [];
+            const updatedData = performanceData.filter(perf => perf.id !== id);
+            
+            localStorage.setItem('ajfPerformance', JSON.stringify(updatedData));
+            loadPerformanceData();
+            
+            showToast('Data penilaian berhasil dihapus');
+        }
+
+        // Load members data
+        function loadMembersData() {
+            const membersList = document.getElementById('membersList');
+            const membersData = JSON.parse(localStorage.getItem('ajfMembers')) || [];
+            
+            membersList.innerHTML = '';
+            
+            membersData.forEach(member => {
+                const statusClass = member.status === 'Aktif' ? 'bg-success' : 'bg-secondary';
+                
+                membersList.innerHTML += `
+                    <tr>
+                        <td>${member.name}</td>
+                        <td>${member.email}</td>
+                        <td>${member.phone}</td>
+                        <td>${member.division}</td>
+                        <td><span class="badge ${statusClass}">${member.status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-primary edit-member" data-id="${member.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger delete-member" data-id="${member.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            </td>
+                    </tr>
+                `;
+            });
+            
+            // Add event listeners to buttons
+            document.querySelectorAll('.edit-member').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    editMember(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-member').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteMember(id);
+                });
+            });
+        }
+
+        // Add member form
+        document.getElementById('addMemberForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('memberName').value;
+            const email = document.getElementById('memberEmail').value;
+            const phone = document.getElementById('memberPhone').value;
+            const division = document.getElementById('memberDivision').value;
+            const status = document.getElementById('memberStatus').value;
+            
+            const membersData = JSON.parse(localStorage.getItem('ajfMembers')) || [];
+            const newId = membersData.length > 0 ? Math.max(...membersData.map(m => m.id)) + 1 : 1;
+            
+            membersData.push({
+                id: newId,
+                name: name,
+                email: email,
+                phone: phone,
+                division: division,
+                status: status
+            });
+            
+            localStorage.setItem('ajfMembers', JSON.stringify(membersData));
+            
+            // Reset form and close modal
+            this.reset();
+            bootstrap.Modal.getInstance(document.getElementById('addMemberModal')).hide();
+            
+            // Reload data
+            loadMembersData();
+            
+            // Show success message
+            showToast('Data anggota berhasil ditambahkan');
+        });
+
+        // Edit member
+        function editMember(id) {
+            const membersData = JSON.parse(localStorage.getItem('ajfMembers')) || [];
+            const member = membersData.find(m => m.id === id);
+            
+            if (member) {
+                // Fill form with member data
+                document.getElementById('memberName').value = member.name;
+                document.getElementById('memberEmail').value = member.email;
+                document.getElementById('memberPhone').value = member.phone;
+                document.getElementById('memberDivision').value = member.division;
+                document.getElementById('memberStatus').value = member.status;
+                
+                // Change form submission to update instead of add
+                const form = document.getElementById('addMemberForm');
+                form.onsubmit = function(e) {
+                    e.preventDefault();
+                    
+                    member.name = document.getElementById('memberName').value;
+                    member.email = document.getElementById('memberEmail').value;
+                    member.phone = document.getElementById('memberPhone').value;
+                    member.division = document.getElementById('memberDivision').value;
+                    member.status = document.getElementById('memberStatus').value;
+                    
+                    localStorage.setItem('ajfMembers', JSON.stringify(membersData));
+                    
+                    // Reset form and close modal
+                    form.reset();
+                    bootstrap.Modal.getInstance(document.getElementById('addMemberModal')).hide();
+                    
+                    // Reload data
+                    loadMembersData();
+                    
+                    // Show success message
+                    showToast('Data anggota berhasil diperbarui');
+                    
+                    // Reset form submission to add
+                    form.onsubmit = null;
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+
+                                          const name = document.getElementById('memberName').value;
+                        const email = document.getElementById('memberEmail').value;
+                        const phone = document.getElementById('memberPhone').value;
+                        const division = document.getElementById('memberDivision').value;
+                        const status = document.getElementById('memberStatus').value;
+                        
+                        const membersData = JSON.parse(localStorage.getItem('ajfMembers')) || [];
+                        const newId = membersData.length > 0 ? Math.max(...membersData.map(m => m.id)) + 1 : 1;
+                        
+                        membersData.push({
+                            id: newId,
+                            name: name,
+                            email: email,
+                            phone: phone,
+                            division: division,
+                            status: status
+                        });
+                        
+                        localStorage.setItem('ajfMembers', JSON.stringify(membersData));
+                        
+                        // Reset form and close modal
+                        this.reset();
+                        bootstrap.Modal.getInstance(document.getElementById('addMemberModal')).hide();
+                        
+                        // Reload data
+                        loadMembersData();
+                        
+                        // Show success message
+                        showToast('Data anggota berhasil ditambahkan');
+                    });
+                };
+                
+                // Show modal
+                new bootstrap.Modal(document.getElementById('addMemberModal')).show();
+            }
+        }
+
+        // Delete member
+        function deleteMember(id) {
+            const membersData = JSON.parse(localStorage.getItem('ajfMembers')) || [];
+            const updatedData = membersData.filter(member => member.id !== id);
+            
+            localStorage.setItem('ajfMembers', JSON.stringify(updatedData));
+            loadMembersData();
+            
+            showToast('Data anggota berhasil dihapus');
+        }
+
+        // Load organization data
+        function loadOrganizationData() {
+            const orgChart = document.getElementById('orgChart');
+            const orgStructure = JSON.parse(localStorage.getItem('ajfOrgStructure')) || {
+                level1: ['Founder'],
+                level2: ['Ketua Umum'],
+                level3: ['Wakil Ketua Umum', 'Sekretaris Umum', 'Bendahara Umum'],
+                level4: ['Divisi HRD', 'Divisi PDD', 'Divisi Program & Event', 'Divisi Riset & Kajian (RISKAN)', 'Divisi Kemitraan & Relasi (HUMAS)', 'Divisi Konseling & Pendampingan', 'Divisi Kreatif & Media (KREMEDIA)', 'Tim IT', 'Tim Relawan']
+            };
+            
+            orgChart.innerHTML = '';
+            
+            // Level 1 - Founder
+            const level1 = document.createElement('div');
+            level1.className = 'org-level';
+            
+            orgStructure.level1.forEach(position => {
+                const node = document.createElement('div');
+                node.className = 'org-node editable';
+                node.textContent = position;
+                node.setAttribute('data-level', 'level1');
+                node.setAttribute('data-position', position);
+                level1.appendChild(node);
+            });
+            
+            orgChart.appendChild(level1);
+            
+            // Level 2 - Ketua Umum
+            const level2 = document.createElement('div');
+            level2.className = 'org-level';
+            
+            orgStructure.level2.forEach(position => {
+                const node = document.createElement('div');
+                node.className = 'org-node editable';
+                node.textContent = position;
+                node.setAttribute('data-level', 'level2');
+                node.setAttribute('data-position', position);
+                level2.appendChild(node);
+            });
+            
+            orgChart.appendChild(level2);
+            
+            // Level 3 - Wakil, Sekretaris, Bendahara
+            const level3 = document.createElement('div');
+            level3.className = 'org-level';
+            
+            orgStructure.level3.forEach(position => {
+                const node = document.createElement('div');
+                node.className = 'org-node editable';
+                node.textContent = position;
+                node.setAttribute('data-level', 'level3');
+                node.setAttribute('data-position', position);
+                level3.appendChild(node);
+            });
+            
+            orgChart.appendChild(level3);
+            
+            // Level 4 - Divisions
+            const level4 = document.createElement('div');
+            level4.className = 'org-level';
+            
+            orgStructure.level4.forEach(position => {
+                const node = document.createElement('div');
+                node.className = 'org-node editable';
+                node.textContent = position;
+                node.setAttribute('data-level', 'level4');
+                node.setAttribute('data-position', position);
+                level4.appendChild(node);
+            });
+            
+            orgChart.appendChild(level4);
+            
+            // Add event listeners to editable nodes
+            document.querySelectorAll('.org-node.editable').forEach(node => {
+                node.addEventListener('click', function() {
+                    const level = this.getAttribute('data-level');
+                    const position = this.getAttribute('data-position');
+                    editOrgPosition(level, position);
+                });
+            });
+        }
+
+        // Edit organization structure button
+        document.getElementById('editOrgStructureBtn').addEventListener('click', function() {
+            const orgStructure = JSON.parse(localStorage.getItem('ajfOrgStructure')) || {
+                level1: ['Founder'],
+                level2: ['Ketua Umum'],
+                level3: ['Wakil Ketua Umum', 'Sekretaris Umum', 'Bendahara Umum'],
+                level4: ['Divisi HRD', 'Divisi PDD', 'Divisi Program & Event', 'Divisi Riset & Kajian (RISKAN)', 'Divisi Kemitraan & Relasi (HUMAS)', 'Divisi Konseling & Pendampingan', 'Divisi Kreatif & Media (KREMEDIA)', 'Tim IT', 'Tim Relawan']
+            };
+            
+            const orgStructureEditor = document.getElementById('orgStructureEditor');
+            orgStructureEditor.innerHTML = '';
+            
+            // Create editor for each level
+            Object.keys(orgStructure).forEach(level => {
+                const levelDiv = document.createElement('div');
+                levelDiv.className = 'mb-3';
+
+                                              const label = document.createElement('label');
+                label.className = 'form-label';
+                label.textContent = level === 'level1' ? 'Level 1 (Founder)' : 
+                                   level === 'level2' ? 'Level 2 (Ketua Umum)' : 
+                                   level === 'level3' ? 'Level 3 (Wakil, Sekretaris, Bendahara)' : 
+                                   'Level 4 (Divisi)';
+                levelDiv.appendChild(label);
+                
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'input-group';
+                
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'form-control';
+                input.value = orgStructure[level].join(', ');
+                input.setAttribute('data-level', level);
+                inputGroup.appendChild(input);
+                
+                const addButton = document.createElement('button');
+                addButton.type = 'button';
+                addButton.className = 'btn btn-outline-secondary';
+                addButton.innerHTML = '<i class="fas fa-plus"></i>';
+                addButton.addEventListener('click', function() {
+                    const newInput = document.createElement('input');
+                    newInput.type = 'text';
+                    newInput.className = 'form-control mt-2';
+                    newInput.setAttribute('data-level', level);
+                    inputGroup.appendChild(newInput);
+                });
+                inputGroup.appendChild(addButton);
+                
+                levelDiv.appendChild(inputGroup);
+                orgStructureEditor.appendChild(levelDiv);
+            });
+            
+            // Show modal
+            new bootstrap.Modal(document.getElementById('editOrgStructureModal')).show();
+        });
+
+        // Edit organization structure form
+        document.getElementById('editOrgStructureForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const orgStructure = {
+                level1: [],
+                level2: [],
+                level3: [],
+                level4: []
+            };
+
+                                                                         // Collect data from inputs
+            document.querySelectorAll('#orgStructureEditor input').forEach(input => {
+                const level = input.getAttribute('data-level');
+                const values = input.value.split(',').map(v => v.trim()).filter(v => v);
+                
+                values.forEach(value => {
+                    if (!orgStructure[level].includes(value)) {
+                        orgStructure[level].push(value);
+                    }
+                });
+            });
+            
+            localStorage.setItem('ajfOrgStructure', JSON.stringify(orgStructure));
+            
+            // Close modal
+            bootstrap.Modal.getInstance(document.getElementById('editOrgStructureModal')).hide();
+            
+            // Reload data
+            loadOrganizationData();
+            
+            // Show success message
+            showToast('Struktur organisasi berhasil diperbarui');
+        });
+
+        // Edit organization position
+        function editOrgPosition(level, position) {
+            const orgStructure = JSON.parse(localStorage.getItem('ajfOrgStructure'));
+            const positions = orgStructure[level];
+            const index = positions.indexOf(position);
+            
+            if (index !== -1) {
+                const newPosition = prompt('Edit nama posisi:', position);
+                
+                if (newPosition && newPosition !== position) {
+                    positions[index] = newPosition;
+                    localStorage.setItem('ajfOrgStructure', JSON.stringify(orgStructure));
+                    loadOrganizationData();
+                    showToast('Posisi berhasil diperbarui');
+                }
+            }
+        }
+
+        // Load programs data
+        function loadProgramsData() {
+            const programsList = document.getElementById('programsList');
+            const programsData = JSON.parse(localStorage.getItem('ajfPrograms')) || [];
+            
+            programsList.innerHTML = '';
+
+        programsData.forEach(program => {
+                const statusClass = program.status === 'Selesai' ? 'bg-success' : 
+                                  program.status === 'Berlangsung' ? 'bg-warning' : 
+                                  program.status === 'Rencana' ? 'bg-primary' : 'bg-danger';
+                
+                programsList.innerHTML += `
+                    <tr>
+                        <td>${program.name}</td>
+                        <td>${formatDate(program.date)}</td>
+                        <td>${program.location}</td>
+                        <td><span class="badge ${statusClass}">${program.status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-primary edit-program" data-id="${program.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger delete-program" data-id="${program.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            // Add event listeners to buttons
+            document.querySelectorAll('.edit-program').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    editProgram(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-program').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteProgram(id);
+                });
+            });
+        }
+
+        // Add program form
+        document.getElementById('addProgramForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+                                                                   const name = document.getElementById('programName').value;
+            const date = document.getElementById('programDate').value;
+            const location = document.getElementById('programLocation').value;
+            const status = document.getElementById('programStatus').value;
+            
+            const programsData = JSON.parse(localStorage.getItem('ajfPrograms')) || [];
+            const newId = programsData.length > 0 ? Math.max(...programsData.map(p => p.id)) + 1 : 1;
+            
+            programsData.push({
+                id: newId,
+                name: name,
+                date: date,
+                location: location,
+                status: status
+            });
+            
+            localStorage.setItem('ajfPrograms', JSON.stringify(programsData));
+            
+            // Reset form and close modal
+            this.reset();
+            bootstrap.Modal.getInstance(document.getElementById('addProgramModal')).hide();
+            
+            // Reload data
+            loadProgramsData();
+            
+            // Show success message
+            showToast('Program/kegiatan berhasil ditambahkan');
+        });
+
+        // Edit program
+        function editProgram(id) {
+            const programsData = JSON.parse(localStorage.getItem('ajfPrograms')) || [];
+            const program = programsData.find(p => p.id === id);
+            
+            if (program) {
+                // Fill form with program data
+                document.getElementById('programName').value = program.name;
+                document.getElementById('programDate').value = program.date;
+                document.getElementById('programLocation').value = program.location;
+                document.getElementById('programStatus').value = program.status;
+                
+                // Change form submission to update instead of add
+                const form = document.getElementById('addProgramForm');
+                form.onsubmit = function(e) {
+                    e.preventDefault();
+
+                    program.name = document.getElementById('programName').value;
+                    program.date = document.getElementById('programDate').value;
+                    program.location = document.getElementById('programLocation').value;
+                    program.status = document.getElementById('programStatus').value;
+                    
+                    localStorage.setItem('ajfPrograms', JSON.stringify(programsData));
+                    
+                    // Reset form and close modal
+                    form.reset();
+                    bootstrap.Modal.getInstance(document.getElementById('addProgramModal')).hide();
+                    
+                    // Reload data
+                    loadProgramsData();
+                    
+                    // Show success message
+                    showToast('Program/kegiatan berhasil diperbarui');
+                    
+                    // Reset form submission to add
+                    form.onsubmit = null;
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        
+                        const name = document.getElementById('programName').value;
+                        const date = document.getElementById('programDate').value;
+                        const location = document.getElementById('programLocation').value;
+                        const status = document.getElementById('programStatus').value;
+                        
+                        const programsData = JSON.parse(localStorage.getItem('ajfPrograms')) || [];
+                        const newId = programsData.length > 0 ? Math.max(...programsData.map(p => p.id)) + 1 : 1;
+                        
+                        programsData.push({
+                            id: newId,
+                            name: name,
+                            date: date,
+                            location: location,
+                            status: status
+                        });
+                        
+                        localStorage.setItem('ajfPrograms', JSON.stringify(programsData));
+                        
+                        // Reset form and close modal
+                        this.reset();
+                        bootstrap.Modal.getInstance(document.getElementById('addProgramModal')).hide();
+                        
+                        // Reload data
+                        loadProgramsData();
+
+                                          // Show success message
+                        showToast('Program/kegiatan berhasil ditambahkan');
+                    });
+                };
+                
+                // Show modal
+                new bootstrap.Modal(document.getElementById('addProgramModal')).show();
+            }
+        }
+
+        // Delete program
+        function deleteProgram(id) {
+            const programsData = JSON.parse(localStorage.getItem('ajfPrograms')) || [];
+            const updatedData = programsData.filter(program => program.id !== id);
+            
+            localStorage.setItem('ajfPrograms', JSON.stringify(updatedData));
+            loadProgramsData();
+            
+            showToast('Program/kegiatan berhasil dihapus');
+        }
+
+        // Load documents data
+        function loadDocumentsData() {
+            const documentsList = document.getElementById('documentsList');
+            const documentsData = JSON.parse(localStorage.getItem('ajfDocuments')) || [];
+            
+            documentsList.innerHTML = '';
+            
+            if (documentsData.length === 0) {
+                documentsList.innerHTML = '<p class="text-center">Belum ada dokumen yang diupload</p>';
+                return;
+            }
+            
+            documentsData.forEach(doc => {
+                const iconClass = doc.type === 'PDF' ? 'fa-file-pdf' : 
+                                 doc.type === 'Word' ? 'fa-file-word' : 
+                                 doc.type === 'Excel' ? 'fa-file-excel' : 
+                                 doc.type === 'PowerPoint' ? 'fa-file-powerpoint' : 
+                                 doc.type === 'Gambar' ? 'fa-file-image' : 'fa-file';
+                
+                const documentItem = document.createElement('div');
+                documentItem.className = 'document-item';
+                documentItem.innerHTML = `
+                    <div class="document-info">
+                        <i class="fas ${iconClass} document-icon"></i>
+                        <div>
+                            <h6 class="mb-0">${doc.name}</h6>
+                            <small class="text-muted">${doc.description || 'Tidak ada deskripsi'}</small>
+                        </div>
+                        </div>
+                    <div class="action-buttons">
+                        <a href="${doc.link}" target="_blank" class="btn btn-sm btn-primary">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        <button class="btn btn-sm btn-danger delete-document" data-id="${doc.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                documentsList.appendChild(documentItem);
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-document').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteDocument(id);
+                });
+            });
+        }
+
+        // Add document form
+        document.getElementById('addDocumentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('documentName').value;
+            const type = document.getElementById('documentType').value;
+            const link = document.getElementById('documentLink').value;
+            const description = document.getElementById('documentDescription').value;
+            
+            const documentsData = JSON.parse(localStorage.getItem('ajfDocuments')) || [];
+            const newId = documentsData.length > 0 ? Math.max(...documentsData.map(d => d.id)) + 1 : 1;
+            
+            documentsData.push({
+                id: newId,
+                name: name,
+                type: type,
+                link: link,
+                description: description
+            });
+            
+            localStorage.setItem('ajfDocuments', JSON.stringify(documentsData));
+            
+            // Reset form and close modal
+            this.reset();
+            bootstrap.Modal.getInstance(document.getElementById('addDocumentModal')).hide();
+            
+            // Reload data
+            loadDocumentsData();
+
+                                                                    // Show success message
+            showToast('Dokumen berhasil ditambahkan');
+        });
+
+        // Delete document
+        function deleteDocument(id) {
+            const documentsData = JSON.parse(localStorage.getItem('ajfDocuments')) || [];
+            const updatedData = documentsData.filter(doc => doc.id !== id);
+            
+            localStorage.setItem('ajfDocuments', JSON.stringify(updatedData));
+            loadDocumentsData();
+            
+            showToast('Dokumen berhasil dihapus');
+        }
+
+        // Load forum data
+        function loadForumData() {
+            const forumPosts = document.getElementById('forumPosts');
+            const forumData = JSON.parse(localStorage.getItem('ajfForumPosts')) || [];
+            
+            forumPosts.innerHTML = '';
+            
+            if (forumData.length === 0) {
+                forumPosts.innerHTML = '<p class="text-center">Belum ada postingan di forum</p>';
+                return;
+            }
+            
+            // Sort posts by date (newest first)
+            forumData.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            forumData.forEach(post => {
+                const postDiv = document.createElement('div');
+                postDiv.className = 'forum-post';
+                postDiv.innerHTML = `
+                    <div class="forum-post-header">
+                        <div class="forum-post-author">${post.author}</div>
+                        <div class="forum-post-date">${formatDate(post.date)}</div>
+                    </div>
+                    <h5>${post.title}</h5>
+                    <p>${post.content}</p>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-thumbs-up"></i> Suka
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-comment"></i> Komentar
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-forum-post" data-id="${post.id}">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                        </div>
+                `;
+                
+                forumPosts.appendChild(postDiv);
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-forum-post').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteForumPost(id);
+                });
+            });
+        }
+
+        // Add forum post form
+        document.getElementById('addForumPostForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('forumTitle').value;
+            const content = document.getElementById('forumContent').value;
+            
+            const forumData = JSON.parse(localStorage.getItem('ajfForumPosts')) || [];
+            const newId = forumData.length > 0 ? Math.max(...forumData.map(p => p.id)) + 1 : 1;
+            
+            forumData.push({
+                id: newId,
+                title: title,
+                content: content,
+                author: 'Admin',
+                date: new Date().toISOString().split('T')[0]
+            });
+            
+            localStorage.setItem('ajfForumPosts', JSON.stringify(forumData));
+            
+            // Reset form
+            this.reset();
+            
+            // Reload data
+            loadForumData();
+            
+            // Show success message
+            showToast('Postingan berhasil ditambahkan');
+        });
+
+        // Delete forum post
+        function deleteForumPost(id) {
+            const forumData = JSON.parse(localStorage.getItem('ajfForumPosts')) || [];
+            const updatedData = forumData.filter(post => post.id !== id);
+            
+            localStorage.setItem('ajfForumPosts', JSON.stringify(updatedData));
+            loadForumData();
+            
+            showToast('Postingan berhasil dihapus');
+        }
+
+        // Load reports data
+        function loadReportsData() {
+            // Attendance chart
+            const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+            const attendanceData = JSON.parse(localStorage.getItem('ajfAttendance')) || [];
+            
+            // Count attendance by status
+            const attendanceCounts = {
+                'Hadir': 0,
+                'Izin': 0,
+                'Tidak Hadir': 0
+            };
+            
+            attendanceData.forEach(att => {
+                attendanceCounts[att.status]++;
+            });
+            
+            new Chart(attendanceCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Hadir', 'Izin', 'Tidak Hadir'],
+                    datasets: [{
+                        label: 'Jumlah',
+                        data: [attendanceCounts['Hadir'], attendanceCounts['Izin'], attendanceCounts['Tidak Hadir']],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(255, 99, 132, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Division chart
+            const divisionCtx = document.getElementById('divisionChart').getContext('2d');
+            const membersData = JSON.parse(localStorage.getItem('ajfMembers')) || [];
+            
+            // Count members by division
+            const divisionCounts = {};
+            
+            membersData.forEach(member => {
+                if (divisionCounts[member.division]) {
+                    divisionCounts[member.division]++;
+                } else {
+                    divisionCounts[member.division] = 1;
+                }
+            });
+            
+            new Chart(divisionCtx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(divisionCounts),
+                    datasets: [{
+                        data: Object.values(divisionCounts),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 159, 64, 0.6)',
+                            'rgba(199, 199, 199, 0.6)',
+                            'rgba(83, 102, 255, 0.6)',
+                            'rgba(40, 159, 64, 0.6)',
+                            'rgba(210, 99, 132, 0.6)',
+                            'rgba(20, 162, 235, 0.6)',
+                            'rgba(255, 159, 64, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(199, 199, 199, 1)',
+                            'rgba(83, 102, 255, 1)',
+                            'rgba(40, 159, 64, 1)',
+                            'rgba(210, 99, 132, 1)',
+                            'rgba(20, 162, 235, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+            
+            // Performance chart
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            const performanceData = JSON.parse(localStorage.getItem('ajfPerformance')) || [];
+            
+            // Group performance by score ranges
+            const scoreRanges = {
+                '0-2': 0,
+                '3-4': 0,
+                '5-6': 0,
+                '7-8': 0,
+                '9-10': 0
+            };
+            
+            performanceData.forEach(perf => {
+                if (perf.score >= 0 && perf.score <= 2) {
+                    scoreRanges['0-2']++;
+                } else if (perf.score >= 3 && perf.score <= 4) {
+                    scoreRanges['3-4']++;
+                } else if (perf.score >= 5 && perf.score <= 6) {
+                    scoreRanges['5-6']++;
+                } else if (perf.score >= 7 && perf.score <= 8) {
+                    scoreRanges['7-8']++;
+                } else if (perf.score >= 9 && perf.score <= 10) {
+                    scoreRanges['9-10']++;
+                }
+            });
+            
+            new Chart(performanceCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(scoreRanges),
+                    datasets: [{
+                        data: Object.values(scoreRanges),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(255, 159, 64, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(54, 162, 235, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+            
+            // Activities chart
+            const activitiesCtx = document.getElementById('activitiesChart').getContext('2d');
+            const programsData = JSON.parse(localStorage.getItem('ajfPrograms')) || [];
+            
+            // Count programs by month
+            const monthCounts = {
+                'Jan': 0,
+                'Feb': 0,
+                'Mar': 0,
+                'Apr': 0,
+                'Mei': 0,
+                'Jun': 0,
+                'Jul': 0,
+                'Agu': 0,
+                'Sep': 0,
+                'Okt': 0,
+                'Nov': 0,
+                'Des': 0
+            };
+            
+            programsData.forEach(program => {
+                const date = new Date(program.date);
+                const month = date.toLocaleString('id-ID', { month: 'short' });
+                
+                if (monthCounts[month] !== undefined) {
+                    monthCounts[month]++;
+                    }
+            });
+            
+            new Chart(activitiesCtx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(monthCounts),
+                    datasets: [{
+                        label: 'Jumlah Kegiatan',
+                        data: Object.values(monthCounts),
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load settings data
+        function loadSettingsData() {
+            const foundationProfile = JSON.parse(localStorage.getItem('ajfFoundationProfile')) || {
+                name: 'Asa Jiwa Foundation',
+                address: 'Jl. Contoh No. 123, Jakarta',
+                phone: '(021) 12345678',
+                email: 'info@asajiwafoundation.org'
+            };
+            
+            document.getElementById('foundationName').value = foundationProfile.name;
+            document.getElementById('foundationAddress').value = foundationProfile.address;
+            document.getElementById('foundationPhone').value = foundationProfile.phone;
+            document.getElementById('foundationEmail').value = foundationProfile.email;
+        }
+
+        // Account settings form
+        document.getElementById('accountSettingsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+                                                                        const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword && newPassword === confirmPassword) {
+                // In a real application, you would hash the password before storing
+                localStorage.setItem('ajfAdminPassword', newPassword);
+                
+                // Reset form
+                this.reset();
+                
+                // Show success message
+                showToast('Password berhasil diperbarui');
+            } else if (newPassword && newPassword !== confirmPassword) {
+                showToast('Password dan konfirmasi password tidak cocok', 'error');
+            }
+        });
+
+        // Foundation profile form
+        document.getElementById('foundationProfileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const foundationProfile = {
+                name: document.getElementById('foundationName').value,
+                address: document.getElementById('foundationAddress').value,
+                phone: document.getElementById('foundationPhone').value,
+                email: document.getElementById('foundationEmail').value
+            };
+            
+            localStorage.setItem('ajfFoundationProfile', JSON.stringify(foundationProfile));
+            
+            // Show success message
+            showToast('Profil yayasan berhasil diperbarui');
+        });
+
+        // Reset data button
+        document.getElementById('resetDataBtn').addEventListener('click', function() {
+            if (confirm('Apakah Anda yakin ingin mereset semua data? Tindakan ini tidak dapat dibatalkan.')) {
+                // Clear all data
+                localStorage.removeItem('ajfAttendance');
+                localStorage.removeItem('ajfPerformance');
+                localStorage.removeItem('ajfMembers');
+                localStorage.removeItem('ajfPrograms');
+                localStorage.removeItem('ajfDocuments');
+                localStorage.removeItem('ajfForumPosts');
+                
+                // Reset to default organization structure
+                const defaultOrgStructure = {
+                    level1: ['Founder'],
+                    level2: ['Ketua Umum'],
+                    level3: ['Wakil Ketua Umum', 'Sekretaris Umum', 'Bendahara Umum'],
+                    level4: ['Divisi HRD', 'Divisi PDD', 'Divisi Program & Event', 'Divisi Riset & Kajian (RISKAN)', 'Divisi Kemitraan & Relasi (HUMAS)', 'Divisi Konseling & Pendampingan', 'Divisi Kreatif & Media (KREMEDIA)', 'Tim IT', 'Tim Relawan']
+                };
+                localStorage.setItem('ajfOrgStructure', JSON.stringify(defaultOrgStructure));
+                
+                // Show success message
+                showToast('Semua data berhasil direset');
+                
+                // Reload current section
+                const activeSection = document.querySelector('.content-section.active').id;
+                loadSectionData(activeSection);
+            }
+        });
+
+        // Helper function to format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
+        }
+
+        // Helper function to show toast notification
+        function showToast(message, type = 'success') {
+            const toastContainer = document.getElementById('toastContainer') || createToastContainer();
+            
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+            
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
             `;
-        });   
-      }
-    function renderTopTenTable() {
-        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []);
-        const evaluatedParticipants = participants.filter(p => p.evaluated).sort((a, b) => b.scores.total - a.scores.total).slice(0, 10);
-        const tbody = document.getElementById('topTenTableBody'); tbody.innerHTML = '';
-        if (evaluatedParticipants.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada peserta yang dinilai.</td></tr>'; return; }
-        evaluatedParticipants.forEach((p, index) => {
-            const row = tbody.insertRow();
-            row.innerHTML = `<td>${index + 1}</td><td>${p.name}</td><td>${p.scores.total}</td><td><span class="status-badge status-${p.status}">${getStatusText(p.status)}</span></td><td>${p.role ? `<span class="role-badge">${p.role}</span>` : '-'}</td>`;
-        });
-    }
-    function getStatusText(status) { switch(status) { case 'pending': return 'Tertunda'; case 'rejected': return 'Tidak Lolos'; case 'accepted-t2': return 'Lolos (Tahap 2)'; case 'accepted-role': return 'Lolos (Jabatan)'; default: return 'Unknown'; } }
-    function saveNote(participantId, noteValue) { const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []); const participant = participants.find(p => p.id === participantId); if (participant) { participant.note = noteValue; saveToLocalStorage(STORAGE_KEY_PARTICIPANTS, participants); } }
-    function deleteParticipant(participantId) { if (confirm("Hapus data peserta?")) { let participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []); participants = participants.filter(p => p.id !== participantId); saveToLocalStorage(STORAGE_KEY_PARTICIPANTS, participants); alert('Peserta dihapus.'); renderParticipantTable(); renderTopTenTable(); } }
-    function openUpdateStatusModal(participantId) {
-        currentEditingParticipantId = participantId;
-        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []);
-        const participant = participants.find(p => p.id === participantId);
-        if (!participant) return;
-        document.getElementById('statusSelect').value = participant.status || ''; document.getElementById('adminNoteInput').value = participant.note || ''; handleStatusChange();
-        if (participant.status === 'accepted-role') { document.getElementById('roleSelect').value = participant.role || ''; }
-        document.getElementById('updateStatusModal').classList.remove('hidden'); document.getElementById('modalOverlay').classList.remove('hidden');
-    }
-    function closeUpdateStatusModal() {
-        document.getElementById('updateStatusModal').classList.add('hidden'); document.getElementById('modalOverlay').classList.add('hidden'); currentEditingParticipantId = null;
-        document.getElementById('statusSelect').value = ''; document.getElementById('roleSelect').value = ''; document.getElementById('adminNoteInput').value = '';
-        document.getElementById('roleSelectionDiv').classList.add('hidden');
-    }
-    function handleStatusChange() { const statusSelect = document.getElementById('statusSelect'); const roleDiv = document.getElementById('roleSelectionDiv'); if (statusSelect.value === 'accepted-role') { roleDiv.classList.remove('hidden'); } else { roleDiv.classList.add('hidden'); } }
-    function saveUpdatedStatus() {
-        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []);
-        const participant = participants.find(p => p.id === currentEditingParticipantId);
-        if (!participant) return;
-        const newStatus = document.getElementById('statusSelect').value; const newRole = document.getElementById('roleSelect').value; const newNote = document.getElementById('adminNoteInput').value;
-        if (!newStatus) { alert('Status harus dipilih.'); return; } if (newStatus === 'accepted-role' && !newRole) { alert('Jabatan harus dipilih untuk status "Lolos (Jabatan)".'); return; }
-        participant.status = newStatus; participant.role = (newStatus === 'accepted-role') ? newRole : null; participant.note = newNote;
-        saveToLocalStorage(STORAGE_KEY_PARTICIPANTS, participants); alert('Status dan Catatan berhasil diperbarui!'); closeUpdateStatusModal(); renderParticipantTable(); renderTopTenTable();
-    }
-    function saveAnnouncement() { const text = document.getElementById('announcementText').value; saveToLocalStorage(STORAGE_KEY_ANNOUNCEMENT, text); alert('Pengumuman berhasil disimpan!'); }
-    function loadAnnouncementForAdmin() { const announcement = loadFromLocalStorage(STORAGE_KEY_ANNOUNCEMENT, ''); document.getElementById('announcementText').value = announcement; }
-    function logoutAdmin() { alert('Anda telah logout.'); showLandingPage(); }
+            
+            toastContainer.appendChild(toast);
+            
+            const bsToast = new bootstrap.Toast(toast, {
+                autohide: true,
+                delay: 3000
+            });
+            
+            bsToast.show();
+            
+            // Remove toast element after it's hidden
+            toast.addEventListener('hidden.bs.toast', function() {
+                toast.remove();
+                });
+        }
 
-    // --- FUNGSI STRUKTUR KEPENGURUS ---
-    function renderStructurePage() {
-      const structure = loadFromLocalStorage(STORAGE_KEY_STRUCTURE, {});
-        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []);
-        const acceptedParticipants = participants.filter(p => p.status === 'accepted-role' || p.status === 'accepted-t2');
-        const grid = document.getElementById('structureGrid'); grid.innerHTML = '';
-        ORG_STRUCTURE.forEach(pos => {
-            const item = document.createElement('div'); item.className = 'structure-item';
-            const currentValue = structure[pos.key] || '-';
-            item.innerHTML = `<h4>${pos.title}</h4><select id="struct-${pos.key}"><option value="">- Kosong -</option>${acceptedParticipants.map(p => `<option value="${p.name}" ${p.name === currentValue ? 'selected' : ''}>${p.name}</option>`).join('')}</select>`;
-            grid.appendChild(item);
-        });
-    }
-    function saveStructure() {
-        const newStructure = {};
-        ORG_STRUCTURE.forEach(pos => { const selectElement = document.getElementById(`struct-${pos.key}`); newStructure[pos.key] = selectElement.value; });
-        saveToLocalStorage(STORAGE_KEY_STRUCTURE, newStructure); alert('Struktur kepengurusan berhasil disimpan!');
-    }
-
-    // --- FUNGSI PENILAIAN KINERJA PENGGURUS ---
-    function renderPerformanceManagerPage() {
-        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []);
-        const acceptedParticipants = participants.filter(p => p.status === 'accepted-role' || p.status === 'accepted-t2');
-        const performerSelect = document.getElementById('performerManagerName'); performerSelect.innerHTML = '<option value="">-- Pilih Pengurus --</option>';
-        acceptedParticipants.forEach(p => { performerSelect.innerHTML += `<option value="${p.name}">${p.name}</option>`; });
-        renderPerformanceManagerHistory();
-    }
-    document.getElementById('performanceManagerForm').addEventListener('submit', function(e) {
-        e.preventDefault(); const formData = new FormData(e.target);
-        const performanceData = { id: Date.now(), date: new Date().toLocaleDateString('id-ID'), name: formData.get('performerManagerName'), commitment: formData.get('commitment'), quality: formData.get('quality'), teamwork: formData.get('teamwork'), initiative: formData.get('initiative'), notes: formData.get('notes') };
-        const performances = loadFromLocalStorage(STORAGE_KEY_PERFORMANCE_MANAGER, []); performances.push(performanceData); saveToLocalStorage(STORAGE_KEY_PERFORMANCE_MANAGER, performances);
-        alert('Penilaian kinerja pengurus berhasil disimpan!'); e.target.reset(); renderPerformanceManagerHistory();
-    });
-    function renderPerformanceManagerHistory() {
-        const performances = loadFromLocalStorage(STORAGE_KEY_PERFORMANCE_MANAGER, []);
-        const tbody = document.getElementById('performanceManagerHistoryBody'); tbody.innerHTML = '';
-        if (performances.length === 0) { tbody.innerHTML = '<tr><td colspan="7" class="loading">Belum ada data penilaian.</td></tr>'; return; }
-        performances.reverse().forEach(p => { const row = tbody.insertRow(); row.innerHTML = `<td>${p.date}</td><td>${p.name}</td><td>${p.commitment}</td><td>${p.quality}</td><td>${p.teamwork}</td><td>${p.initiative}</td><td>${p.notes || '-'}</td>`; });
-    }
-
-    // --- FUNGSI PENILAIAN KINERJA ANGGOTA ---
-    function renderPerformanceMemberPage() {
-        const memberList = ["Ahmad", "Budi", "Citra", "Deni", "Eka"];
-        const performerSelect = document.getElementById('performerMemberName'); performerSelect.innerHTML = '<option value="">-- Pilih Anggota --</option>';
-        memberList.forEach(name => { performerSelect.innerHTML += `<option value="${name}">${name}</option>`; });
-        renderPerformanceMemberHistory();
-  }
-  document.getElementById('performanceMemberForm').addEventListener('submit', function(e) {
-        e.preventDefault(); const formData = new FormData(e.target);
-        const performanceData = { id: Date.now(), date: new Date().toLocaleDateString('id-ID'), name: formData.get('performerMemberName'), keaktifan: formData.get('keaktifan'), disiplin: formData.get('disiplin'), kontribusi: formData.get('kontribusi'), adaptasi: formData.get('adaptasi'), notes: formData.get('notes') };
-        const performances = loadFromLocalStorage(STORAGE_KEY_PERFORMANCE_MEMBER, []); performances.push(performanceData); saveToLocalStorage(STORAGE_KEY_PERFORMANCE_MEMBER, performances);
-        alert('Penilaian kinerja anggota berhasil disimpan!'); e.target.reset(); renderPerformanceMemberHistory();
-    });
-    function renderPerformanceMemberHistory() {
-        const performances = loadFromLocalStorage(STORAGE_KEY_PERFORMANCE_MEMBER, []);
-        const tbody = document.getElementById('performanceMemberHistoryBody'); tbody.innerHTML = '';
-        if (performances.length === 0) { tbody.innerHTML = '<tr><td colspan="7" class="loading">Belum ada data penilaian.</td></tr>'; return; }
-        performances.reverse().forEach(p => { const row = tbody.insertRow(); row.innerHTML = `<td>${p.date}</td><td>${p.name}</td><td>${p.keaktifan}</td><td>${p.disiplin}</td><td>${p.kontribusi}</td><td>${p.adaptasi}</td><td>${p.notes || '-'}</td>`; });
-    }
-    
-    // --- FUNGSI HALAMAN PENGUMUMAN PUBLIK ---
-    function renderAnnouncementPage() {
-        const announcement = loadFromLocalStorage(STORAGE_KEY_ANNOUNCEMENT, 'Belum ada pengumuman terkini.');
-        document.getElementById('announcementDisplay').innerHTML = `<p>${announcement.replace(/\n/g, '<br>')}</p>`;
-        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []);
-        const publicTbody = document.getElementById('publicResultTableBody'); publicTbody.innerHTML = '';
-        if (participants.length === 0) { publicTbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Belum ada data peserta.</td></tr>'; }
-        participants.forEach(p => { const row = publicTbody.insertRow(); row.innerHTML = `<td>${p.name}</td><td>${p.evaluated ? p.scores.total : '-'}</td><td><span class="status-badge status-${p.status}">${getStatusText(p.status)}</span></td><td>${p.role ? `<span class="role-badge">${p.role}</span>` : '-'}</td>`; });
-        const topTenParticipants = participants.filter(p => p.evaluated).sort((a, b) => b.scores.total - a.scores.total).slice(0, 10);
-        const topTenTbody = document.getElementById('publicTopTenTableBody'); topTenTbody.innerHTML = '';
-        if (topTenParticipants.length === 0) { topTenTbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada peserta yang dinilai.</td></tr>'; }
-        topTenParticipants.forEach((p, index) => { const row = topTenTbody.insertRow(); row.innerHTML = `<td>${index + 1}</td><td>${p.name}</td><td>${p.scores.total}</td><td><span class="status-badge status-${p.status}">${getStatusText(p.status)}</span></td><td>${p.role ? `<span class="role-badge">${p.role}</span>` : '-'}</td>`; });
-    }
-
-    // --- INISIALISASI AWAL ---
-    if (!localStorage.getItem(STORAGE_KEY_ANNOUNCEMENT)) { saveToLocalStorage(STORAGE_KEY_ANNOUNCEMENT, "Pengumuman resmi hasil assessment calon pengurus akan ditampilkan di sini. Silakan cek secara berkala."); }
-    if (!localStorage.getItem(STORAGE_KEY_STRUCTURE)) { saveToLocalStorage(STORAGE_KEY_STRUCTURE, {}); }
-</script>
-
+        // Helper function to create toast container
+        function createToastContainer() {
+            const container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'toast-container position-fixed bottom-0 end-0 p-3';
+            document.body.appendChild(container);
+            return container;
+        }
+    </script>
 </body>
 </html>
