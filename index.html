@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Assessment Asa Jiwa Foundation</title>
+    <style>
+        /* CSS akan tetap sama seperti sebelumnya, saya hanya menambahkan sedikit untuk PG */
+        /* ... (semua CSS dari sebelumnya tetap sama, tidak ada perubahan) ... */
+        :root {
+            --primary-color: #0056b3; --secondary-color: #f4f4f4; --accent-color: #28a745; --danger-color: #dc3545; --info-color: #17a2b8; --warning-color: #ffc107; --purple-color: #6f42c1; --text-color: #333; --border-color: #ddd; --shadow: 0 4px 8px rgba(0,0,0,0.1); --light-gray: #f8f9fa;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: var(--text-color); background-color: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 1300px; margin: 30px auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: var(--shadow); }
+        h1, h2, h3 { color: var(--primary-color); border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px; margin-top: 0; }
+        h1 { text-align: center; }
+        .form-section, .card { margin-bottom: 30px; padding: 20px; border: 1px solid var(--border-color); border-radius: 8px; background-color: var(--light-gray); }
+        .question-block { margin-bottom: 25px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #555; }
+        textarea, input[type="text"], input[type="password"], input[type="email"], select { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 1rem; box-sizing: border-box; transition: border-color 0.3s; }
+        textarea:focus, input:focus, select:focus { border-color: var(--primary-color); outline: none; }
+        textarea { min-height: 130px; resize: vertical; }
+        button { display: inline-block; background: var(--primary-color); color: #fff; padding: 12px 25px; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: background-color 0.3s, transform 0.2s; margin: 5px; }
+        button:hover { background: #004494; transform: translateY(-2px); }
+        button.danger { background: var(--danger-color); } button.danger:hover { background: #c82333; }
+        button.success { background: var(--accent-color); } button.success:hover { background: #218838; }
+        .hidden { display: none !important; }
+        .auth-form, .participant-start-form { text-align: center; max-width: 400px; margin: 40px auto; padding: 25px; border: 1px solid var(--border-color); border-radius: 8px; }
+        .auth-form input, .auth-form button { width: 90%; margin: 8px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; box-shadow: var(--shadow); }
+        th, td { padding: 12px; border: 1px solid var(--border-color); text-align: left; vertical-align: top; }
+        th { background-color: var(--primary-color); color: white; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; } tr:hover { background-color: #f1f1f1; }
+        .announcement-box { background-color: #e7f3fe; border-left: 6px solid var(--primary-color); padding: 20px; margin: 20px 0; border-radius: 5px; }
+        .status-badge { padding: 6px 12px; border-radius: 20px; color: white; font-size: 0.85em; font-weight: bold; text-transform: uppercase; }
+        .status-pending { background-color: var(--warning-color); color: #333; } .status-rejected { background-color: var(--danger-color); } .status-accepted-t2 { background-color: var(--info-color); } .status-accepted-role { background-color: var(--accent-color); }
+        .loading { text-align: center; font-style: italic; color: #777; }
+        .admin-nav { background: var(--secondary-color); padding: 10px 20px; border-radius: 6px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .admin-nav h2 { margin: 0; border: none; } .admin-nav button { padding: 8px 15px; font-size: 0.9rem; }
+        .top-score { font-weight: bold; color: var(--accent-color); }
+        .result-box { background-color: #e8f5e9; border: 1px solid var(--accent-color); padding: 15px; border-radius: 6px; margin-top: 15px; text-align: center; }
+        .result-box h4 { margin-top: 0; color: var(--accent-color); }
+        .login-error { color: var(--danger-color); font-size: 0.9em; margin-top: 10px; display: none; }
+        .announcement-table-section { margin-top: 30px; } .announcement-table-section h3 { color: var(--info-color); }
+        .role-badge { background-color: var(--purple-color); color: white; padding: 3px 8px; border-radius: 10px; font-size: 0.8em; }
+        .admin-menu-card { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .admin-menu-card .card { flex: 1 1 300px; text-align: center; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; background-color: white; border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; }
+        .admin-menu-card .card:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+        .admin-menu-card .card h3 { border: none; margin-bottom: 10px; }
+        .structure-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .structure-item { background: white; border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; }
+        .structure-item h4 { margin-top: 0; color: var(--primary-color); border-bottom: 1px solid var(--secondary-color); padding-bottom: 5px; }
+        .performance-form .form-group { margin-bottom: 15px; }
+        .performance-form label { font-weight: normal; }
+        .performance-form input[type="number"] { width: 80px; }
+        .notes-textarea { margin-top: 10px; }
+        .multiple-choice-question { margin-bottom: 20px; padding: 15px; border: 1px solid var(--border-color); border-radius: 8px; background-color: #fff; }
+        .multiple-choice-question p { margin: 0 0 10px 0; font-weight: 600; }
+        .multiple-choice-question .options label { font-weight: normal; display: flex; align-items: center; margin-bottom: 8px; cursor: pointer; }
+        .multiple-choice-question .options input[type="radio"] { margin-right: 10px; width: auto; }
+    </style>
+</head>
+<body>
+
+    <!-- VIEW 1: Halaman Utama (Login / Mulai) -->
+    <div id="landingPage" class="container">
+        <h1>Sistem Assessment Asa Jiwa Foundation</h1>
+        <p style="text-align: center; font-size: 1.1em; color: #666;">Selamat datang di sistem penilaian online Asa Jiwa Foundation. Silakan pilih peran Anda.</p>
+        <div class="auth-form"><h2>Area Admin Internal</h2><p style="font-size: 0.9em; color: #888;">Hanya untuk panitia internal Asa Jiwa Foundation</p><input type="email" id="adminEmailInput" placeholder="Email Admin" required><input type="password" id="adminPasswordInput" placeholder="Password Admin" required><button onclick="adminLogin()">Masuk sebagai Admin</button><div id="loginError" class="login-error">Email atau Password salah!</div></div>
+        <hr style="margin: 40px 0; border: 0; border-top: 1px solid var(--border-color);">
+        <div class="participant-start-form"><h2>Area Peserta</h2><p style="font-size: 0.9em; color: #888;">Isi form assessment untuk calon pengurus</p><button onclick="showParticipantForm()">Mulai Assessment</button><br><br><button onclick="showAnnouncementPage()" style="background: var(--info-color);">Lihat Pengumuman</button></div>
+    </div>
+
+    <!-- VIEW 2: Form Peserta -->
+    <div id="participantFormPage" class="container hidden">
+        <h1>Form Assessment Calon Pengurus</h1>
+        <form id="assessmentForm">
+            <div class="form-section"><h2>Data Diri</h2><label for="participantName">Nama Lengkap:</label><input type="text" id="participantName" name="participantName" required><label for="participantEmail">Email Aktif:</label><input type="email" id="participantEmail" name="participantEmail" required></div>
+
+            <div class="form-section">
+                <h2>Tes Psikologi (Essay)</h2>
+                <div class="question-block"><label>1. Ceritakan tentang pengalaman pribadi di mana Anda harus menghadapi tekanan atau stres yang sangat besar. Bagaimana cara Anda menghadapinya, dan apa pembelajaran utama yang Anda ambil dari pengalaman tersebut?</label><textarea name="psy_1" required></textarea></div>
+                <div class="question-block"><label>2. Jika seorang teman dekat Anda tiba-tiba menunjukkan perubahan perilaku yang mencolok dan menarik diri dari lingkungan sosial, langkah-langkah apa yang akan Anda lakukan untuk mendukungnya? Jelaskan pendekatan Anda.</label><textarea name="psy_2" required></textarea></div>
+                <div class="question-block"><label>3. Bagaimana Anda mendefinisikan 'kesehatan mental' dalam konteks diri sendiri? Apa indikator-indikator yang Anda gunakan untuk mengetahui bahwa Anda sedang dalam kondisi mental yang baik atau sebaliknya?</label><textarea name="psy_3" required></textarea></div>
+                <div class="question-block"><label>4. Deskripsikan mekanisme coping (strategi penanggulangan) yang biasa Anda lakukan saat merasa cemas atau kewalahan. Seberapa efektif mekanisme tersebut bagi Anda?</label><textarea name="psy_4" required></textarea></div>
+                <div class="question-block"><label>5. Menurut Anda, apa peran penting dari kesadaran akan kesehatan mental dalam komunitas atau lingkungan kerja, dan bagaimana Anda berkontribusi untuk menciptakan lingkungan yang mendukung?</label><textarea name="psy_5" required></textarea></div>
+            </div>
+
+            <div class="form-section">
+                <h2>Tes Kepemimpinan (Essay)</h2>
+                <div class="question-block"><label>1. Menurut Anda, apa perbedaan mendasar antara 'memimpin' dan 'mengatur'? Berikan contoh situasi di mana satu pendekatan lebih efektif daripada yang lain dalam konteks organisasi sukarela seperti Asa Jiwa Foundation.</label><textarea name="lead_1" required></textarea></div>
+                <div class="question-block"><label>2. Bayangkan Anda memimpin sebuah proyek, dan salah satu anggota tim secara konsisten tidak memenuhi tenggat waktu. Bagaimana Anda akan menangani situasi ini untuk memastikan proyek tetap on track tanpa menciptakan konflik yang merusak?</label><textarea name="lead_2" required></textarea></div>
+                <div class="question-block"><label>3. Seorang pemimpin sering kali harus membuat keputusan yang tidak populer untuk kebaikan keseluruhan tim. Bagaimana Anda mengomunikasikan keputusan sulit tersebut kepada tim Anda untuk meminimalkan resistensi dan menjaga moral tetap tinggi?</label><textarea name="lead_3" required></textarea></div>
+                <div class="question-block"><label>4. Apa arti 'memberdayakan' bagi Anda sebagai seorang pemimpin? Jelaskan strategi konkret yang akan Anda gunakan untuk mengidentifikasi, mengembangkan, dan mempercayai potensi anggota tim Anda.</label><textarea name="lead_4" required></textarea></div>
+                <div class="question-block"><label>5. Dalam lingkungan yang sering berubah seperti organisasi kemasyarakatan, bagaimana Anda membina ketahanan (resilience) dan kemampuan adaptasi dalam diri Anda dan tim yang Anda pimpin?</label><textarea name="lead_5" required></textarea></div>
+            </div>
+
+            <div class="form-section">
+                <h2>Tes Kontribusi (Essay)</h2>
+                <div class="question-block"><label>1. Selain menjalankan tugas-tugas yang sudah ditentukan, seperti inovasi atau ide kreatif apa yang ingin Anda bawa untuk membantu mengembangkan Asa Jiwa Foundation? Jelaskan idenanya dan potensi dampaknya.</label><textarea name="cont_1" required></textarea></div>
+                <div class="question-block"><label>2. Kontribusi tidak selalu berupa ide besar. Deskripsikan peran kecil atau tugas 'di balik layar' yang menurut Anda sangat penting untuk kelancaran operasional organisasi, dan mengapa Anda bersedia melakukannya.</label><textarea name="cont_2" required></textarea></div>
+                <div class="question-block"><label>3. Setiap orang memiliki jaringan dan keahlian unik. Keahlian atau jaringan apa yang Anda miliki yang dapat Anda manfaatkan untuk mendukung misi dan program-program Asa Jiwa Foundation?</label><textarea name="cont_3" required></textarea></div>
+                <div class="question-block"><label>4. Bagaimana Anda menjaga semangat dan motivasi Anda untuk terus berkontribusi, bahkan di tengah tantangan, kelelahan, atau ketika hasil dari kerja keras tidak langsung terlihat?</label><textarea name="cont_4" required></textarea></div>
+                <div class="question-block"><label>5. Asa Jiwa Foundation fokus pada kesehatan jiwa. Bagaimana pemahaman Anda tentang isu ini, dan bagaimana Anda pribadi ingin berkontribusi untuk mengurangi stigma dan meningkatkan akses terhadap dukungan kesehatan jiwa di masyarakat?</label><textarea name="cont_5" required></textarea></div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Tes Pengetahuan Kesehatan (Pilihan Ganda)</h2>
+                <p><em>Pilihlah satu jawaban yang paling benar untuk setiap pertanyaan berikut.</em></p>
+                
+                <div class="multiple-choice-question">
+                    <p>1. Apa yang dimaksud dengan 'stigma' dalam konteks kesehatan jiwa?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_1" value="a">a. Rasa malu individu untuk mencari bantuan profesional.</label>
+                        <label><input type="radio" name="pg_1" value="b">b. Keyakinan bahwa orang dengan masalah kesehatan jiwa adalah berbahaya dan tidak bisa disembuhkan.</label>
+                        <label><input type="radio" name="pg_1" value="c">c. Gejala fisik yang menyertai kondisi kesehatan jiwa.</label>
+                        <label><input type="radio" name="pg_1" value="d">d. Diagnosis resmi dari seorang psikiater.</label>
+                    </div>
+                </div>
+
+                <div class="multiple-choice-question">
+                    <p>2. Manakah dari berikut ini yang BUKKAN merupakan tanda-tanda umum dari gangguan kecemasan?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_2" value="a">a. Detak jantung yang lebih cepat.</label>
+                        <label><input type="radio" name="pg_2" value="b">b. Merasa sangat khawatir tentang berbagai hal yang tidak pasti.</label>
+                        <label><input type="radio" name="pg_2" value="c">c. Merasa sangat bahagia dan berenergi sepanjang waktu.</label>
+                        <label><input type="radio" name="pg_2" value="d">d> Sulit berkonsentrasi atau merasa pikiran kosong.</label>
+                    </div>
+                </div>
+
+                <div class="multiple-choice-question">
+                    <p>3. Apa peran utama dari 'active listening' (mendengar aktif) dalam memberikan dukungan emosional kepada seseorang?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_3" value="a">a. Segera memberikan solusi untuk masalah yang dihadapi.</label>
+                        <label><input type="radio" name="pg_3" value="b">b. Mendengarkan dengan penuh perhatian tanpa menghakimi, dan menunjukkan bahwa Anda memahami perasaan mereka.</label>
+                        <label><input type="radio" name="pg_3" value="c">c"> Membagi pengalaman serupa untuk membuat mereka merasa lebih baik.</label>
+                        <label><input type="radio" name="pg_3" value="d">d"> Mengalihkan pembicaraan ke topik yang lebih ringan.</label>
+                    </div>
+                </div>
+
+                <div class="multiple-choice-question">
+                    <p>4. Apa yang dimaksud dengan 'self-care'?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_4" value="a">a. Kegiatan yang dilakukan untuk menjaga kesehatan fisik, mental, dan emosional.</label>
+                        <label><input type="radio" name="pg_4" value="b">b. Hanya beristirahat saat sudah merasa sangat lelah.</label>
+                        <label><input type="radio" name="pg_4" value="c">c. Bergantung pada orang lain untuk memenuhi kebutuhan emosional.</label>
+                        <label><input type="radio" name="pg_4" value="d">d. Menghindari semua situasi yang menimbulkan stres.</label>
+                    </div>
+                </div>
+
+                <div class="multiple-choice-question">
+                    <p>5. Apa dampak jangka panjang dari stres kronis terhadap kesehatan fisik?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_5" value="a">a. Meningkatkan daya tahan tubuh terhadap penyakit.</label>
+                        <label><input type="radio" name="pg_5" value="b">b"> Dapat meningkatkan risiko penyakit jantung, tekanan darah tinggi, dan melemahkan sistem kekebalan tubuh.</label>
+                        <label><input type="radio" name="pg_5" value="c">c"> Tidak ada dampak signifikan pada kesehatan fisik.</label>
+                        <label><input type="radio" name="pg_5" value="d">d"> Hanya mempengaruhi suasana hati.</label>
+                    </div>
+                </div>
+
+                <div class="multiple-choice-question">
+                    <p>6. Apa perbedaan antara psikolog dan psikiater?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_6" value="a">a> Psikolog adalah dokter yang bisa meresepkan obat, sedangkan psikiater tidak.</label>
+                        <label><input type="radio" name="pg_6" value="b">> Psikiater adalah dokter spesialis yang bisa mendiagnosis gangguan jiwa dan meresepkan obat, sedangkan psikolog fokus pada terapi bicara dan asesmen.</label>
+                        <label><input type="radio" name="pg_6" value="c">> Tidak ada perbedaan, kedua istilah tersebut sama.</label>
+                        <label><input type="radio" name="pg_6" value="d">> Psikolog bekerja di rumah sakit, sedangkan psikiater praktik di klinik swasta.</label>
+                    </div>
+                </div>
+
+                <div class="multiple-choice-question">
+                    <p>7. Apa tujuan dari teknik pernapasan deep breathing (pernapasan dalam) dalam mengelola stres?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_7" value="a">a> Untuk meningkatkan kapasitas paru-paru.</label>
+                        <label><input type="radio" name="pg_7" value="b">> Untuk menenangkan sistem saraf simpatik, menurunkan detak jantung, dan menurunkan tekanan darah.</label>
+                        <label><input type="radio" name="pg_7" value="c">> Untuk mengalihkan pikiran dari sumber stres.</label>
+                        <label><input type="radio" name="pg_7" value="d">> Sebagai bentuk latihan fisik.</label>
+                    </div>
+                </div>
+
+                <div class="multiple-choice-question">
+                    <p>8. Apa yang dimaksud dengan 'burnout'?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_8" value="a">a"> Kondisi kelelahan emosional, fisik, dan mental yang disebabkan oleh stres berkepanjangan di tempat kerja atau lingkungan yang terlalu menuntut.</label>
+                        <label><input type="radio" name="pg_8" value="b">> Kehilangan minat sepenuhnya terhadap pekerjaan atau hobi.</label>
+                        <label><input type="radio" name="pg_8" value="c">> Perasaan cemas yang berlebihan sebelum memulai tugas.</label>
+                        <label><input type="radio" name="pg_8" value="d">> Kondisi di mana seseorang bekerja terlalu keras dalam waktu singkat.</label>
+                    </div>
+                </div>
+
+                <div class="multiple-choice-question">
+                    <p>9. Mengapa penting untuk membicarakan kesehatan mental secara terbuka di masyarakat?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_9" value="a">> Untuk mengurangi stigma, mendorong orang untuk mencari bantuan, dan menciptakan lingkungan yang lebih mendukung.</label>
+                        <label><input type="radio" name="pg_9" value="b">> Agar orang menjadi lebih fokus pada masalah kesehatan fisik.</label>
+                        <label><input type="radio" name="pg_9" value="c">> Untuk memastikan semua orang didiagnosis dengan gangguan jiwa.</label>
+                        <label><input type="radio" name="pg_9" value="d">> Hanya untuk kepentingan kampanye media sosial.</label>
+                    </div>
+                </div>
+
+                <div class="multiple-choice-question">
+                    <p>10. Apa yang harus menjadi langkah pertama jika Anda curiga teman Anda sedang mengalami krisis kesehatan jiwa?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_10" value="a">> Mengabaikannya dan berharap ia akan baik-baik saja sendiri.</label>
+                        <label><input type="radio" name="pg_10" value="b">> Mendekatinya, mendengarkan tanpa menghakimi, dan menawarkan bantuan untuk mencari profesional.</label>
+                        <label><input type="radio" name="pg_10" value="c">> Memberinya nasihat tentang cara mengatasi masalahnya.</label>
+                        <label><input type="radio" name="pg_10" value="d">> Menceritakan pengalaman Anda kepada orang lain.</label>
+                    </div>
+                </div>
+
+                <div class="multiple-choice-question">
+                    <p>11. Manakah dari berikut ini yang merupakan contoh dari 'boundary' (batasan) yang sehat dalam hubungan?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_11" value="a">> Mengatakan 'iya' untuk semua permintaan agar tidak mengecewakan orang lain.</label>
+                        <label><input type="radio" name="pg_11" value="b">> Jujur tentang apa yang bisa dan tidak bisa Anda lakukan, dan menghormati batasan orang lain.</label>
+                        <label><input type="radio" name="pg_11" value="c">> Membagikan semua masalah pribadi Anda kepada teman dekat.</label>
+                        <label><input type="radio" name="pg_11" value="d">> Selalu tersedia 24/7 untuk teman yang membutuhkan bantuan.</label>
+                    </div>
+                </div>
+
+                <div class="multiple-choice-question">
+                    <p>12. Apa manfaat dari terapi kelompok (group therapy) dalam konteks kesehatan jiwa?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_12" value="a">> Memberikan rasa terisolasi dan membuat peserta merasa lebih sendirian.</label>
+                        <label><input type="radio" name="pg_12" value="b">> Menyediakan dukungan sosial, mengurangi rasa sendirian, dan memungkinkan peserta belajar dari pengalaman orang lain dalam situasi yang aman.</label>
+                        <label><input type="radio" name="pg_12" value="c">> Lebih murah daripada terapi individu.</label>
+                        <label><input type="radio" name="pg_12" value="d">> Hanya efektif untuk masalah yang sangat ringan.</label>
+                    </div>
+                </div>
+
+                <div class="multiple-choice-question">
+                  <p>13. Apa yang dimaksud dengan 'mindfulness' (kesadaran penuh)?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_13" value="a">> Kemampuan untuk melakukan banyak hal sekaligus.</label>
+                        <label><input type="radio" name="pg_13" value="b">> Kondisi di mana pikiran benar-benar kosong.</label>
+                        <label><input type="radio" name="pg_13" value="c">> Menyadari dan sepenuhnya hadir di saat ini, tanpa menghakimi pengalaman di dalam diri atau di sekitar.</label>
+                        <label><input type="radio" name="pg_13" value="d">> Merencanakan masa depan dengan sangat detail.</label>
+                    </div>
+                </div>
+
+                <div class="multiple-choice-question">
+                    <p>14. Faktor apa yang paling signifikan yang dapat meningkatkan risiko seseorang mengalami masalah kesehatan jiwa?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_14" value="a">> Genetika dan faktor biologis.</label>
+                        <label><input type="radio" name="pg_14" value="b">> Pengalaman traumatis di masa lalu.</label>
+                        <label><input type="radio" name="pg_14" value="c">> Stres kronis, isolasi sosial, dan kurangnya akses ke dukungan.</label>
+><label><input type="radio" name="pg_14" value="d">> Semua jawaban di atas benar dan seringkali berinteraksi.</label>
+                    </div>
+                </div>
+
+                <div class="multiple-choice-question">
+                    <p>15. Apa tujuan utama dari kampanye kesehatan jiwa seperti yang dilakukan oleh Asa Jiwa Foundation?</p>
+                    <div class="options">
+                        <label><input type="radio" name="pg_15" value="a">> Untuk mengumpulkan dana untuk penelitian.</label>
+                        <label><input type="radio" name="pg_15" value="b">> Untuk mendidik publik, mengurangi stigma, dan mendorong orang untuk mencari bantuan, serta mendorong kebijakan yang mendukung kesehatan jiwa.</label>
+                       label><input type="radio" name="pg_15" value="c">> Untuk menggantikan peran profesional kesehatan jiwa.</label>
+                        <label><input type="radio" name="pg_15" value="d">> Hanya untuk menyediakan layanan konseling gratis.</label>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="success">Kirim Jawaban & Dinilai Otomatis</button>
+            <button type="button" class="danger" onclick="showLandingPage()">Batal</button>
+        </form>
+    </div>
+
+    <!-- VIEW 3: Dashboard Admin Menu -->
+    <div id="adminDashboardMenuPage" class="container hidden">
+        <div class="admin-nav"><h2>Dashboard Admin</h2><button onclick="logoutAdmin()" class="danger">Logout Admin</button></div>
+        <h2 style="text-align: center; border: none;">Pilih Menu yang Ingin Dikelola</h2>
+        <div class="admin-menu-card">
+            <div class="card" onclick="loadAdminAssessmentPage()"><h3>📝 Assessment Peserta</h3><p>Kelola data peserta, nilai, status, dan catatan.</p></div>
+            <div class="card" onclick="loadAdminStructurePage()"><h3>👥 Struktur Kepengurusan</h3><p>Atur dan lihat struktur kepengurusan aktif.</p></div>
+            <div class="card" onclick="loadAdminPerformanceManagerPage()"><h3>📊 Penilaian Kerja Pengurus</h3><p>Beri penilaian kinerja untuk pengurus aktif.</p></div>
+            <div class="card" onclick="loadAdminPerformanceMemberPage()"><h3>📝 Penilaian Kerja Anggota</h3><p>Beri penilaian kinerja untuk anggota aktif.</p></div>
+            <div class="card" onclick="loadAdminAnnouncementPage()"><h3>📢 Pengelolaan Pengumuman</h3><p>Buat atau edit pengumuman untuk peserta.</p></div>
+        </div>
+    </div>
+
+    <!-- VIEW 4: Dashboard Admin Assessment -->
+  <div id="adminAssessmentPage" class="container hidden">
+        <div class="admin-nav"><h2>Dashboard Admin - Assessment Peserta</h2><button onclick="backToAdminMenu()">&larr; Kembali ke Menu</button></div>
+        <div class="card"><h2>Daftar Peserta & Penilaian</h2><table id="participantTable"><thead><tr><th>Nama</th><th>Email</th><th>Total Nilai</th><th>Status</th><th>Jabatan</th><th>Catatan Admin</th><th>Aksi</th></tr></thead><tbody id="participantTableBody"><tr><td colspan="7" class="loading">Memuat data...</td></tr></tbody></table></div>
+        <div class="card"><h2>Dashboard Top 10 Peserta</h2><table id="topTenTable"><thead><tr><th>Peringkat</th><th>Nama</th><th>Total Nilai</th><th>Status</th><th>Jabatan</th></tr></thead><tbody id="topTenTableBody"><tr><td colspan="5" class="loading">Memuat data...</td></tr></tbody></table></div>
+    </div>
+    
+    <!-- VIEW 5: Modal Update Status -->
+    <div id="updateStatusModal" class="container hidden" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; width: 90%; max-width: 500px; background: white; border: 2px solid var(--primary-color); border-radius: 10px; padding: 20px;">
+        <h3>Update Status & Jabatan</h3>
+        <label for="statusSelect">Pilih Status:</label>
+        <select id="statusSelect" onchange="handleStatusChange()"><option value="">-- Pilih Status --</option><option value="pending">Tertunda</option><option value="rejected">Tidak Lolos</option><option value="accepted-t2">Lolos (Tahap 2)</option><option value="accepted-role">Lolos (Jabatan)</option></select>
+        <div id="roleSelectionDiv" class="hidden">
+            <label for="roleSelect">Pilih Jabatan:</label>
+            <select id="roleSelect"><option value="">-- Pilih Jabatan --</option><option value="Divisi HRD">Divisi HRD</option><option value="Divisi PDD">Divisi PDD</option><option value="Divisi Program dan Event">Divisi Program dan Event</option><option value="Divisi Riset dan Kajian (RISKAN)">Divisi Riset dan Kajian (RISKAN)</option><option value="Divisi Kemitraan dan Relasi (HUMAS)">Divisi Kemitraan dan Relasi (HUMAS)</option><option value="Divisi Konseling dan Pendampingan">Divisi Konseling dan Pendampingan</option><option value="Divisi Kreatif dan Media (KREMEDIA)">Divisi Kreatif dan Media (KREMEDIA)</option><option value="Tim IT">Tim IT</option><option value="Tim Relawan">Tim Relawan</option></select>
+        </div>
+        <label for="adminNoteInput">Catatan Admin:</label>
+        <textarea id="adminNoteInput" rows="3" placeholder="Tambahkan catatan untuk peserta ini..."></textarea>
+        <div style="text-align: right; margin-top: 15px;">
+            <button onclick="closeUpdateStatusModal()" class="danger">Batal</button>
+            <button onclick="saveUpdatedStatus()" class="success">Simpan Perubahan</button>
+        </div>
+    </div>
+    <div id="modalOverlay" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+
+    <!-- VIEW 6: Halaman Struktur Kepengurusan -->
+    <div id="adminStructurePage" class="container hidden">
+        <div class="admin-nav"><h2>Dashboard Admin - Struktur Kepengurusan</h2><button onclick="backToAdminMenu()">&larr; Kembali ke Menu</button></div>
+        <div class="card"><h2>Struktur Kepengurusan Aktif</h2><p>Klik pada nama untuk mengubahnya dengan nama pengurus yang sudah lolos.</p><div class="structure-grid" id="structureGrid"></div><button onclick="saveStructure()" class="success" style="margin-top: 20px;">Simpan Struktur Kepengurusan</button></div>
+    </div>
+
+    <!-- VIEW 7: Halaman Penilaian Kinerja Pengurus -->
+    <div id="adminPerformanceManagerPage" class="container hidden">
+        <div class="admin-nav"><h2>Dashboard Admin - Penilaian Kerja Pengurus</h2><button onclick="backToAdminMenu()">&larr; Kembali ke Menu</button></div>
+        <div class="card"><h2>Form Penilaian Kinerja Pengurus</h2><form id="performanceManagerForm" class="performance-form"><div class="form-group"><label for="performerManagerName">Nama Pengurus:</label><select id="performerManagerName" required><option value="">-- Pilih Pengurus --</option></select></div><div class="form-group"><label>Komitmen terhadap Organisasi (Skala 1-5):</label><input type="number" name="commitment" min="1" max="5" required></div><div class="form-group"><label>Kualitas Kerja (Skala 1-5):</label><input type="number" name="quality" min="1" max="5" required></div><div class="form-group"><label>Kerjasama dalam Tim (Skala 1-5):</label><input type="number" name="teamwork" min="1" max="5" required></div><div class="form-group"><label>Inisiatif dan Kreativitas (Skala 1-5):</label><input type="number" name="initiative" min="1" max="5" required></div><div class="form-group"><label>Catatan Tambahan:</label><textarea name="notes" rows="4"></textarea></div><button type="submit" class="success">Simpan Penilaian</button></form></div>
+         <div class="card"><h2>Riwayat Penilaian Pengurus</h2><table id="performanceManagerHistoryTable"><thead><tr><th>Tanggal</th><th>Nama</th><th>Komitmen</th><th>Kualitas</th><th>Kerjasama</th><th>Inisiatif</th><th>Catatan</th></tr></thead><tbody id="performanceManagerHistoryBody"><tr><td colspan="7" class="loading">Belum ada data penilaian.</td></tr></tbody></table></div>
+    </div>
+
+    <!-- VIEW 8: Halaman Penilaian Kinerja Anggota -->
+    <div id="adminPerformanceMemberPage" class="container hidden">
+        <div class="admin-nav"><h2>Dashboard Admin - Penilaian Kerja Anggota</h2><button onclick="backToAdminMenu()">&larr; Kembali ke Menu</button></div>
+        <div class="card"><h2>Form Penilaian Kinerja Anggota</h2><form id="performanceMemberForm" class="performance-form"><div class="form-group"><label for="performerMemberName">Nama Anggota:</label><select id="performerMemberName" required><option value="">-- Pilih Anggota --</option></select></div><div class="form-group"><label>Keaktifan dalam Kegiatan (Skala 1-5):</label><input type="number" name="keaktifan" min="1" max="5" required></div><div class="form-group"><label>Disiplin dan Tanggung Jawab (Skala 1-5):</label><input type="number" name="disiplin" min="1" max="5" required></div><div class="form-group"><label>Kontribusi Ide dan Saran (Skala 1-5):</label><input type="number" name="kontribusi" min="1" max="5" required></div><div class="form-group"><label>Kemampuan Beradaptasi (Skala 1-5):</label><input type="number" name="adaptasi" min="1" max="5" required></div><div class="form-group"><label>Catatan Tambahan:</label><textarea name="notes" rows="4"></textarea></div><button type="submit" class="success">Simpan Penilaian</button></form></div>
+         <div class="card"><h2>Riwayat Penilaian Anggota</h2><table id="performanceMemberHistoryTable"><thead><tr><th>Tanggal</th><th>Nama</th><th>Keaktifan</th><th>Disiplin</th><th>Kontribusi</th><th>Adaptasi</th><th>Catatan</th></tr></thead><tbody id="performanceMemberHistoryBody"><tr><td colspan="7" class="loading">Belum ada data penilaian.</td></tr></tbody></table></div>
+    </div>
+    
+    <!-- VIEW 9: Halaman Pengelolaan Pengumuman Admin -->
+    <div id="adminAnnouncementPage" class="container hidden">
+        <div class="admin-nav"><h2>Dashboard Admin - Pengelolaan Pengumuman</h2><button onclick="backToAdminMenu()">&larr; Kembali ke Menu</button></div>
+        <div class="card"><h2>Pengelolaan Pengumuman</h2><p>Buat atau perbarui teks pengumuman yang akan muncul di halaman publik.</p><label for="announcementText">Teks Pengumuman:</label><textarea id="announcementText" rows="6" placeholder="Tulis pengumuman di sini..."></textarea><button onclick="saveAnnouncement()">Simpan Pengumuman</button></div>
+  </div>
+
+  <!-- VIEW 10: Halaman Pengumuman untuk Peserta -->
+    <div id="announcementPage" class="container hidden">
+        <h1>Pengumuman Hasil Assessment</h1>
+        <div id="announcementDisplay" class="announcement-box"><p class="loading">Memuat pengumuman...</p></div>
+        <div class="announcement-table-section"><h3>Hasil Penilaian Seluruh Peserta</h3><table id="publicResultTable"><thead><tr><th>Nama</th><th>Total Nilai</th><th>Status Kelulusan</th><th>Jabatan (Jika Lolos)</th></tr></thead><tbody id="publicResultTableBody"><tr><td colspan="4" class="loading">Memuat data...</td></tr></tbody></table></div>
+        <div class="announcement-table-section"><h3>10 Peserta dengan Nilai Tertinggi</h3><table id="publicTopTenTable"><thead><tr><th>Peringkat</th><th>Nama</th><th>Total Nilai</th><th>Status Kelulusan</th><th>Jabatan (Jika Lolos)</th></tr></thead><tbody id="publicTopTenTableBody"><tr><td colspan="5" class="loading">Memuat data...</td></tr></tbody></table></div>
+        <p style="text-align: center; margin-top: 30px;">Cek pengumuman secara berkala. Terima kasih atas partisertisasi Anda.</p>
+        <button onclick="showLandingPage()">Kembali ke Halaman Utama</button>
+    </div>
+
+<script>
+    // --- KONFIGURASI & DATA ---
+    const STORAGE_KEY_PARTICIPANTS = 'asajiwa_participants_v5'; // Versi baru karena ada perubahan data
+    const STORAGE_KEY_ANNOUNCEMENT = 'asajiwa_announcement_v4';
+    const STORAGE_KEY_STRUCTURE = 'asajiwa_structure_v1';
+    const STORAGE_KEY_PERFORMANCE_MANAGER = 'asajiwa_performance_manager_v1';
+    const STORAGE_KEY_PERFORMANCE_MEMBER = 'asajiwa_performance_member_v1';
+    const ADMIN_EMAIL = "asajiwafoundation@gmail.com";
+    const ADMIN_PASSWORD = "ASAJIWAFOUNDATION";
+    const AVAILABLE_ROLES = ["Divisi HRD", "Divisi PDD", "Divisi Program dan Event", "Divisi Riset dan Kajian (RISKAN)", "Divisi Kemitraan dan Relasi (HUMAS)", "Divisi Konseling dan Pendampingan", "Divisi Kreatif dan Media (KREMEDIA)", "Tim IT", "Tim Relawan"];
+    const ORG_STRUCTURE = [{ title: "Founder", key: "founder" }, { title: "Ketua Umum (Ketum)", key: "ketum" }, { title: "Wakil Ketua Umum (Waketum)", key: "waketum" }, { title: "Sekretaris Umum (Sekum)", key: "sekum" }, { title: "Bendahara Umum (Bendum)", key: "bendum" }, { title: "Divisi HRD", key: "hrd" }, { title: "Divisi PDD", key: "pdd" }, { title: "Divisi Program dan Event", key: "progevent" }, { title: "Divisi Riset dan Kajian (RISKAN)", key: "riskan" }, { title: "Divisi Kemitraan dan Relasi (HUMAS)", key: "humas" }, { title: "Divisi Konseling dan Pendampingan", key: "konseling" }, { title: "Divisi Kreatif dan Media (KREMEDIA)", key: "kremedia" }, { Tim IT", key: "it" }, { title: "Tim Relawan", key: "relawan" }];
+    let currentEditingParticipantId = null;
+
+    // --- FUNGSI UTILITAS ---
+    function showPage(pageId) { document.querySelectorAll('.container').forEach(page => page.classList.add('hidden')); document.getElementById(pageId).classList.remove('hidden'); }
+    function saveToLocalStorage(key, data) { localStorage.setItem(key, JSON.stringify(data)); }
+    function loadFromLocalStorage(key, defaultValue = null) { const data = localStorage.getItem(key); return data ? JSON.parse(data) : defaultValue; }
+    
+    // --- FUNGSI HALAMAN UTAMA (LANDING PAGE) ---
+    function showLandingPage() { showPage('landingPage'); document.getElementById('loginError').style.display = 'none'; document.getElementById('adminEmailInput').value = ''; document.getElementById('adminPasswordInput').value = ''; }
+    function adminLogin() { const email = document.getElementById('adminEmailInput').value; const password = document.getElementById('adminPasswordInput').value; const errorDiv = document.getElementById('loginError'); if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) { alert('Login Admin Berhasil!'); loadAdminDashboardMenu(); } else { errorDiv.style.display = 'block'; } }
+    function showParticipantForm() { showPage('participantFormPage'); }
+    function showAnnouncementPage() { renderAnnouncementPage(); showPage('announcementPage'); }
+
+    // --- FUNGSI FORM PESERTA & SIMULASI PENILAIAN (DIPERBARUI) ---
+    document.getElementById('assessmentForm').addEventListener('submit', async function(e) {
+        e.preventDefault(); const formData = new FormData(e.target);
+        const participantData = { id: Date.now(), name: formData.get('participantName'), email: formData.get('participantEmail'), answers: {}, scores: { pg_total: 0, psy: 0, lead: 0, cont: 0, total: 0 }, status: 'pending', evaluated: false, role: null, note: null };
+        // Kumpulkan jawaban essay
+        for (let [key, value] of formData.entries()) { if (key !== 'participantName' && key !== 'participantEmail' && !key.startsWith('pg_')) participantData.answers[key] = value; }
+        // Kumpulkan jawaban PG
+        for (let i = 1; i <= 15; i++) { const pgKey = `pg_${i}`; participantData.answers[pgKey] = formData.get(pgKey); }
+        
+        alert('Sedang memproses jawaban Anda...');
+        const submitButton = e.target.querySelector('button[type="submit"]'); const originalText = submitButton.innerText; submitButton.innerText = 'Memproses...'; submitButton.disabled = true;
+        await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 2000));
+
+             // Simulasi penilaian PG (nilai per soal 10, total 150)
+        let pgScore = 0;
+        const pgAnswers = {
+            '1': 'b', '2': 'c', '3': 'b', '4': 'a', '5': 'b', '6': 'b', '7': 'b', '8': 'a', '9': 'a', '10': 'b',
+            '11': 'b', '12': 'b', '13': 'c', '14': 'd', '15': 'b'
+        };
+        for (let i = 1; i <= 15; i++) { if (participantData.answers[`pg_${i}`] === pgAnswers[i.toString()]) pgScore += 10; }
+        participantData.scores.pg_total = pgScore;
+
+        // Simulasi penilaian Essay (nilai per kategori 0-100, total 300)
+        participantData.scores.psy = Math.floor(Math.random() * 41) + 60;
+        participantData.scores.lead = Math.floor(Math.random() * 41) + 60;
+        participantData.scores.cont = Math.floor(Math.random() * 41) + 60;
+        
+        // Hitung total nilai
+        participantData.scores.total = participantData.scores.pg_total + participantData.scores.psy + participantData.scores.lead + participantData.scores.cont;
+        participantData.evaluated = true;
+
+        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []); participants.push(participantData); saveToLocalStorage(STORAGE_KEY_PARTICIPANTS, participants);
+        submitButton.innerText = originalText; submitButton.disabled = false;
+        const resultDiv = document.createElement('div'); resultDiv.className = 'result-box'; resultDiv.innerHTML = `<h4>Terima Kasih!</h4><p>Jawaban Anda telah berhasil dikirim dan dinilai. Hasil akan diumumkan melalui halaman pengumuman.</p><p><strong>Good luck!</strong></p>`;
+        e.target.appendChild(resultDiv); e.target.querySelector('button[type="submit"]').disabled = true;
+    });
+
+    // --- FUNGSI DASHBOARD ADMIN MENU ---
+    function loadAdminDashboardMenu() { showPage('adminDashboardMenuPage'); }
+    function backToAdminMenu() { showPage('adminDashboardMenuPage'); }
+    function loadAdminAssessmentPage() { renderAssessmentPage(); showPage('adminAssessmentPage'); }
+    function loadAdminStructurePage() { renderStructurePage(); showPage('adminStructurePage'); }
+    function loadAdminPerformanceManagerPage() { renderPerformanceManagerPage(); showPage('adminPerformanceManagerPage'); }
+    function loadAdminPerformanceMemberPage() { renderPerformanceMemberPage(); showPage('adminPerformanceMemberPage'); }
+    function loadAdminAnnouncementPage() { loadAnnouncementForAdmin(); showPage('adminAnnouncementPage'); }
+    
+    // --- FUNGSI DASHBOARD ADMIN ASSESSMENT (DIPERBARUI) ---
+    function renderAssessmentPage() { renderParticipantTable(); renderTopTenTable(); }
+    function renderParticipantTable() {
+        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []);
+        const tbody = document.getElementById('participantTableBody'); tbody.innerHTML = '';
+        if (participants.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Belum ada data peserta.</td></tr>'; return; }
+        participants.forEach(p => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td>${p.name}</td><td>${p.email}</td><td>${p.evaluated ? p.scores.total : 'Belum Dinilai'}</td>
+                <td><span class="status-badge status-${p.status}">${getStatusText(p.status)}</span></td>
+                <td>${p.role ? `<span class="role-badge">${p.role}</span>` : '-'}</td>
+                <td><textarea class="notes-textarea" id="note-${p.id}" placeholder="Tambahkan catatan..." onchange="saveNote(${p.id}, this.value)">${p.note || ''}</textarea></td>
+                <td><button onclick="openUpdateStatusModal(${p.id})">Update Status</button> <button onclick="deleteParticipant(${p.id})" class="danger">Hapus</button></td>
+            `;
+        });   
+      }
+    function renderTopTenTable() {
+        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []);
+        const evaluatedParticipants = participants.filter(p => p.evaluated).sort((a, b) => b.scores.total - a.scores.total).slice(0, 10);
+        const tbody = document.getElementById('topTenTableBody'); tbody.innerHTML = '';
+        if (evaluatedParticipants.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada peserta yang dinilai.</td></tr>'; return; }
+        evaluatedParticipants.forEach((p, index) => {
+            const row = tbody.insertRow();
+            row.innerHTML = `<td>${index + 1}</td><td>${p.name}</td><td>${p.scores.total}</td><td><span class="status-badge status-${p.status}">${getStatusText(p.status)}</span></td><td>${p.role ? `<span class="role-badge">${p.role}</span>` : '-'}</td>`;
+        });
+    }
+    function getStatusText(status) { switch(status) { case 'pending': return 'Tertunda'; case 'rejected': return 'Tidak Lolos'; case 'accepted-t2': return 'Lolos (Tahap 2)'; case 'accepted-role': return 'Lolos (Jabatan)'; default: return 'Unknown'; } }
+    function saveNote(participantId, noteValue) { const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []); const participant = participants.find(p => p.id === participantId); if (participant) { participant.note = noteValue; saveToLocalStorage(STORAGE_KEY_PARTICIPANTS, participants); } }
+    function deleteParticipant(participantId) { if (confirm("Hapus data peserta?")) { let participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []); participants = participants.filter(p => p.id !== participantId); saveToLocalStorage(STORAGE_KEY_PARTICIPANTS, participants); alert('Peserta dihapus.'); renderParticipantTable(); renderTopTenTable(); } }
+    function openUpdateStatusModal(participantId) {
+        currentEditingParticipantId = participantId;
+        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []);
+        const participant = participants.find(p => p.id === participantId);
+        if (!participant) return;
+        document.getElementById('statusSelect').value = participant.status || ''; document.getElementById('adminNoteInput').value = participant.note || ''; handleStatusChange();
+        if (participant.status === 'accepted-role') { document.getElementById('roleSelect').value = participant.role || ''; }
+        document.getElementById('updateStatusModal').classList.remove('hidden'); document.getElementById('modalOverlay').classList.remove('hidden');
+    }
+    function closeUpdateStatusModal() {
+        document.getElementById('updateStatusModal').classList.add('hidden'); document.getElementById('modalOverlay').classList.add('hidden'); currentEditingParticipantId = null;
+        document.getElementById('statusSelect').value = ''; document.getElementById('roleSelect').value = ''; document.getElementById('adminNoteInput').value = '';
+        document.getElementById('roleSelectionDiv').classList.add('hidden');
+    }
+    function handleStatusChange() { const statusSelect = document.getElementById('statusSelect'); const roleDiv = document.getElementById('roleSelectionDiv'); if (statusSelect.value === 'accepted-role') { roleDiv.classList.remove('hidden'); } else { roleDiv.classList.add('hidden'); } }
+    function saveUpdatedStatus() {
+        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []);
+        const participant = participants.find(p => p.id === currentEditingParticipantId);
+        if (!participant) return;
+        const newStatus = document.getElementById('statusSelect').value; const newRole = document.getElementById('roleSelect').value; const newNote = document.getElementById('adminNoteInput').value;
+        if (!newStatus) { alert('Status harus dipilih.'); return; } if (newStatus === 'accepted-role' && !newRole) { alert('Jabatan harus dipilih untuk status "Lolos (Jabatan)".'); return; }
+        participant.status = newStatus; participant.role = (newStatus === 'accepted-role') ? newRole : null; participant.note = newNote;
+        saveToLocalStorage(STORAGE_KEY_PARTICIPANTS, participants); alert('Status dan Catatan berhasil diperbarui!'); closeUpdateStatusModal(); renderParticipantTable(); renderTopTenTable();
+    }
+    function saveAnnouncement() { const text = document.getElementById('announcementText').value; saveToLocalStorage(STORAGE_KEY_ANNOUNCEMENT, text); alert('Pengumuman berhasil disimpan!'); }
+    function loadAnnouncementForAdmin() { const announcement = loadFromLocalStorage(STORAGE_KEY_ANNOUNCEMENT, ''); document.getElementById('announcementText').value = announcement; }
+    function logoutAdmin() { alert('Anda telah logout.'); showLandingPage(); }
+
+    // --- FUNGSI STRUKTUR KEPENGURUS ---
+    function renderStructurePage() {
+      const structure = loadFromLocalStorage(STORAGE_KEY_STRUCTURE, {});
+        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []);
+        const acceptedParticipants = participants.filter(p => p.status === 'accepted-role' || p.status === 'accepted-t2');
+        const grid = document.getElementById('structureGrid'); grid.innerHTML = '';
+        ORG_STRUCTURE.forEach(pos => {
+            const item = document.createElement('div'); item.className = 'structure-item';
+            const currentValue = structure[pos.key] || '-';
+            item.innerHTML = `<h4>${pos.title}</h4><select id="struct-${pos.key}"><option value="">- Kosong -</option>${acceptedParticipants.map(p => `<option value="${p.name}" ${p.name === currentValue ? 'selected' : ''}>${p.name}</option>`).join('')}</select>`;
+            grid.appendChild(item);
+        });
+    }
+    function saveStructure() {
+        const newStructure = {};
+        ORG_STRUCTURE.forEach(pos => { const selectElement = document.getElementById(`struct-${pos.key}`); newStructure[pos.key] = selectElement.value; });
+        saveToLocalStorage(STORAGE_KEY_STRUCTURE, newStructure); alert('Struktur kepengurusan berhasil disimpan!');
+    }
+
+    // --- FUNGSI PENILAIAN KINERJA PENGGURUS ---
+    function renderPerformanceManagerPage() {
+        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []);
+        const acceptedParticipants = participants.filter(p => p.status === 'accepted-role' || p.status === 'accepted-t2');
+        const performerSelect = document.getElementById('performerManagerName'); performerSelect.innerHTML = '<option value="">-- Pilih Pengurus --</option>';
+        acceptedParticipants.forEach(p => { performerSelect.innerHTML += `<option value="${p.name}">${p.name}</option>`; });
+        renderPerformanceManagerHistory();
+    }
+    document.getElementById('performanceManagerForm').addEventListener('submit', function(e) {
+        e.preventDefault(); const formData = new FormData(e.target);
+        const performanceData = { id: Date.now(), date: new Date().toLocaleDateString('id-ID'), name: formData.get('performerManagerName'), commitment: formData.get('commitment'), quality: formData.get('quality'), teamwork: formData.get('teamwork'), initiative: formData.get('initiative'), notes: formData.get('notes') };
+        const performances = loadFromLocalStorage(STORAGE_KEY_PERFORMANCE_MANAGER, []); performances.push(performanceData); saveToLocalStorage(STORAGE_KEY_PERFORMANCE_MANAGER, performances);
+        alert('Penilaian kinerja pengurus berhasil disimpan!'); e.target.reset(); renderPerformanceManagerHistory();
+    });
+    function renderPerformanceManagerHistory() {
+        const performances = loadFromLocalStorage(STORAGE_KEY_PERFORMANCE_MANAGER, []);
+        const tbody = document.getElementById('performanceManagerHistoryBody'); tbody.innerHTML = '';
+        if (performances.length === 0) { tbody.innerHTML = '<tr><td colspan="7" class="loading">Belum ada data penilaian.</td></tr>'; return; }
+        performances.reverse().forEach(p => { const row = tbody.insertRow(); row.innerHTML = `<td>${p.date}</td><td>${p.name}</td><td>${p.commitment}</td><td>${p.quality}</td><td>${p.teamwork}</td><td>${p.initiative}</td><td>${p.notes || '-'}</td>`; });
+    }
+
+    // --- FUNGSI PENILAIAN KINERJA ANGGOTA ---
+    function renderPerformanceMemberPage() {
+        const memberList = ["Ahmad", "Budi", "Citra", "Deni", "Eka"];
+        const performerSelect = document.getElementById('performerMemberName'); performerSelect.innerHTML = '<option value="">-- Pilih Anggota --</option>';
+        memberList.forEach(name => { performerSelect.innerHTML += `<option value="${name}">${name}</option>`; });
+        renderPerformanceMemberHistory();
+  }
+  document.getElementById('performanceMemberForm').addEventListener('submit', function(e) {
+        e.preventDefault(); const formData = new FormData(e.target);
+        const performanceData = { id: Date.now(), date: new Date().toLocaleDateString('id-ID'), name: formData.get('performerMemberName'), keaktifan: formData.get('keaktifan'), disiplin: formData.get('disiplin'), kontribusi: formData.get('kontribusi'), adaptasi: formData.get('adaptasi'), notes: formData.get('notes') };
+        const performances = loadFromLocalStorage(STORAGE_KEY_PERFORMANCE_MEMBER, []); performances.push(performanceData); saveToLocalStorage(STORAGE_KEY_PERFORMANCE_MEMBER, performances);
+        alert('Penilaian kinerja anggota berhasil disimpan!'); e.target.reset(); renderPerformanceMemberHistory();
+    });
+    function renderPerformanceMemberHistory() {
+        const performances = loadFromLocalStorage(STORAGE_KEY_PERFORMANCE_MEMBER, []);
+        const tbody = document.getElementById('performanceMemberHistoryBody'); tbody.innerHTML = '';
+        if (performances.length === 0) { tbody.innerHTML = '<tr><td colspan="7" class="loading">Belum ada data penilaian.</td></tr>'; return; }
+        performances.reverse().forEach(p => { const row = tbody.insertRow(); row.innerHTML = `<td>${p.date}</td><td>${p.name}</td><td>${p.keaktifan}</td><td>${p.disiplin}</td><td>${p.kontribusi}</td><td>${p.adaptasi}</td><td>${p.notes || '-'}</td>`; });
+    }
+    
+    // --- FUNGSI HALAMAN PENGUMUMAN PUBLIK ---
+    function renderAnnouncementPage() {
+        const announcement = loadFromLocalStorage(STORAGE_KEY_ANNOUNCEMENT, 'Belum ada pengumuman terkini.');
+        document.getElementById('announcementDisplay').innerHTML = `<p>${announcement.replace(/\n/g, '<br>')}</p>`;
+        const participants = loadFromLocalStorage(STORAGE_KEY_PARTICIPANTS, []);
+        const publicTbody = document.getElementById('publicResultTableBody'); publicTbody.innerHTML = '';
+        if (participants.length === 0) { publicTbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Belum ada data peserta.</td></tr>'; }
+        participants.forEach(p => { const row = publicTbody.insertRow(); row.innerHTML = `<td>${p.name}</td><td>${p.evaluated ? p.scores.total : '-'}</td><td><span class="status-badge status-${p.status}">${getStatusText(p.status)}</span></td><td>${p.role ? `<span class="role-badge">${p.role}</span>` : '-'}</td>`; });
+        const topTenParticipants = participants.filter(p => p.evaluated).sort((a, b) => b.scores.total - a.scores.total).slice(0, 10);
+        const topTenTbody = document.getElementById('publicTopTenTableBody'); topTenTbody.innerHTML = '';
+        if (topTenParticipants.length === 0) { topTenTbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Belum ada peserta yang dinilai.</td></tr>'; }
+        topTenParticipants.forEach((p, index) => { const row = topTenTbody.insertRow(); row.innerHTML = `<td>${index + 1}</td><td>${p.name}</td><td>${p.scores.total}</td><td><span class="status-badge status-${p.status}">${getStatusText(p.status)}</span></td><td>${p.role ? `<span class="role-badge">${p.role}</span>` : '-'}</td>`; });
+    }
+
+    // --- INISIALISASI AWAL ---
+    if (!localStorage.getItem(STORAGE_KEY_ANNOUNCEMENT)) { saveToLocalStorage(STORAGE_KEY_ANNOUNCEMENT, "Pengumuman resmi hasil assessment calon pengurus akan ditampilkan di sini. Silakan cek secara berkala."); }
+    if (!localStorage.getItem(STORAGE_KEY_STRUCTURE)) { saveToLocalStorage(STORAGE_KEY_STRUCTURE, {}); }
+</script>
+
+</body>
+</html>
